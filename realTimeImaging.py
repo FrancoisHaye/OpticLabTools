@@ -1,0 +1,351 @@
+"""
+Module providing an RealTimeAnimation class for imaging in real time the output of a ThorLabs camera
+"""
+
+#%% Introduction - imports and configuration
+
+# classical imports
+from dataclasses import dataclass, astuple
+from functools import partial
+import numpy as np
+from scipy.ndimage import gaussian_filter
+import matplotlib as mpl
+from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import time
+
+# rich terminal configuration
+from rich.console import Console
+from rich.traceback import install
+from rich.table import Table
+from rich.columns import Columns
+
+console = Console(soft_wrap=True)
+install(console=console, show_locals=True)
+
+# Personnal library imports (from utils)
+from utils.pygauss import gaussianFit
+from utils.tl_camera import TLCamera, TLCameraSDK
+try:
+    from utils.windows_setup import configure_path
+    configure_path("./thorlabs_dlls")
+except ImportError:
+    configure_path = None
+from utils.mogdevice import MOGDevice
+
+
+#%% Exception classes
+
+class CameraException(Exception): ...
+class ImageException(Exception): ...
+#%% Parameter classes
+
+@dataclass()
+class CameraParameters:
+    """
+    ``dataclass`` representing the parameters to give to the TLCamera instance.
+
+    Parameters
+    ----------
+    exposure_time_us : ``int``
+        The exposure time of the camera in µs.
+    
+    poll_timeout_ms : ``int``
+        The time an image is kept in the camera buffer. For more intel see utils.tlcamera.TLCamera
+    
+    frame_rate_target : ``int``
+        The frame per second that we desire the camera to work at. Usefull only if ``frame_rate_control_enabled`` is ``True``.
+
+    frame_rate_control_enabled : ``bool``
+        Whether to control the camera imaging speed by a desired framerate.
+    
+    """
+
+    exposure_time_us: int = 1
+    poll_timeout_ms: int = 60
+    frame_rate_target: int | None = 30
+    frame_rate_control_enabled: bool = False
+
+    def rich_print(self, console: Console):
+        """
+        Pretty display of the parameters in a rich ``Console`` object.
+        
+        Parameters
+        ----------
+        console : ``rich.console.Console``
+            The console object on which to print the parameters
+        
+        """
+
+        console.print("\n[bold]Camera parameters :camera:\n")
+        console.print(f"Exposure time:                         {self.exposure_time_us:>10d} µs")
+        console.print(f"Poll timeout:                          {self.poll_timeout_ms:>10d} ms")
+        console.print(f"The camera is controlled by framerate: {self.frame_rate_control_enabled!s:>13}")
+        if self.frame_rate_control_enabled:
+            console.print(f"Framerate asked:                       {self.frame_rate_target:>9d} fps")
+        console.print("\n\n")
+
+@dataclass()
+class VisualizationParameters:
+    """
+    ``dataclass`` representing the parameters for the matplotlib visualization of the images.
+    
+    Parameters
+    ----------
+    fontsize : ``int``, optional
+        The fontsize for the plot.
+        default = 12
+        
+    magnification : ``float``, optional
+        The magnification of the imaging system used before the camera. This is used to compute a scalebar on the plot.
+        default = 1.
+
+    lengthscale_um : ``int`` or ``None``, optional
+        The length of the scalebar plotted on the image in µm.
+        default = None
+    
+    """
+    
+    fontsize: int = 12
+    magnification: float = 1.
+    lengthscale_um: int | None = None
+    zoom_bool: bool = True
+    zoom_width: int | None = 50
+
+
+    def rich_print(self, console: Console):
+        """
+        Pretty display of the parameters in a rich ``Console`` object.
+        
+        Parameters
+        ----------
+        console : ``rich.console.Console``
+            The console object on which to print the parameters
+        
+        """
+
+        console.print("\n[bold]Visualization parameters :framed_picture:\n")
+        console.print(f"Fontsize:                              {self.fontsize:>10d} pt")
+        console.print(f"Magnification:                         {self.magnification:>11.2g} x")
+        if self.lengthscale_um:
+            console.print(f"Lengthscale:                           {self.lengthscale_um:>10d} µm")
+        console.print(f"Do zoom?                               {self.zoom_bool!s:>13}")
+        if self.zoom_bool:
+            console.print(f"Zoom width:                            {self.zoom_width:>10d} px")
+        console.print("\n\n")
+
+@dataclass
+class VisualizationGaussianParameters(VisualizationParameters):
+
+    downscale_bool: bool = True
+    downscale_order: int = 5
+    gaussian_filter_sigma: int = 3
+
+    def rich_print(self, console: Console):
+
+        console.print("\n[bold]Visualization parameters :framed_picture:\n")
+        console.print(f"Fontsize:                              {self.fontsize:>10d} pt")
+        console.print(f"Magnification:                         {self.magnification:>11.2g} x")
+        if self.lengthscale_um: 
+            console.print(f"Lengthscale:                           {self.lengthscale_um:>10d} µm")
+        console.print(f"Do zoom?                               {self.zoom_bool!s:>13}")
+        if self.zoom_bool:
+            console.print(f"Zoom width:                            {self.zoom_width:>10d} px")
+        console.print(f"Do downscaling?                        {self.downscale_bool!s:>13}")
+        if self.downscale_bool:
+            console.print(f"Downscaling order:                     {self.downscale_order:>10d} px")
+        console.print(f"Gaussian filter stdev:                 {self.gaussian_filter_sigma:>10d} px")
+        console.print("\n\n")
+
+
+#%% Imaging classes
+
+class RealTimeImaging:
+    """
+    An imaging in real time abstract class for thorlabs camera, using tl_camera_SDK.
+    
+    Parameters
+    ----------
+    camParams : ``CameraParameters``, optional
+        Parameters of the camera acquisition for the imaging.
+
+    visParams : ``VisualizationParameters``, optional
+        Parameters of the visualization (matplotlib) for the imaging.
+
+    console : ``rich.console.Console``, optional
+        Console on which to print all informations.
+    
+    verbosity : ``int``, optional
+        Verbosity of the program, between 1 and 4.
+        default = 2
+
+    """
+
+    def __init__(
+            self,
+            camParams: CameraParameters = CameraParameters(),
+            visParams: VisualizationParameters = VisualizationParameters(),
+            console: Console = Console(),
+            verbosity: int = 2
+    ):
+        
+        self.camParams = camParams
+        self.visParams = visParams
+        self.cns: Console = console
+        self.verbosity = verbosity
+
+        self.fig, self.ax = plt.subplots()
+
+        self.im: mpl.image.AxesImage | None = None
+        self.scalebar: AnchoredSizeBar | None = None
+        self.ani: FuncAnimation | None = None
+        self.sdk: TLCameraSDK | None = None
+        self.cam: TLCamera | None = None
+        self.scale: float = 1.
+
+        self.fontprops = mpl.font_manager.FontProperties(size=self.visParams.fontsize)
+
+    def rich_print_params(self):
+        """Pretty prints the parameters of the imaging."""
+        self.camParams.rich_print(self.cns)
+        self.visParams.rich_print(self.cns)
+    
+    def _init_function(self): ...
+
+    def _update_function(self, frame): ...
+
+    def run(self): ...
+
+
+class SimpleImaging(RealTimeImaging):
+    """
+    ``RealTimeImaging`` subclass providing only the image and an eventual scalebar.
+    
+    Parameters
+    ----------
+    camParams : ``CameraParameters``, optional
+        Parameters of the camera acquisition for the imaging.
+
+    visParams : ``VisualizationParameters``, optional
+        Parameters of the visualization (matplotlib) for the imaging.
+
+    console : ``rich.console.Console``, optional
+        Console on which to print all informations.
+
+    verbosity : ``int``, optional
+        verbosity of the program during the animation, between 1 and 4.
+        default = 2
+
+    """
+    
+    def _init_function(self):
+
+        image_cam = self.cam.get_pending_frame_or_null()
+
+        if image_cam is None: 
+            raise(ImageException("Unable to acquire first image"))
+        
+        image_buffer = np.copy(image_cam.image_buffer)
+        shaped_image = image_buffer.reshape(self.cam.image_height_pixels, self.cam.image_width_pixels)
+
+        if self.visParams.zoom_bool:
+            i, j = np.unravel_index(shaped_image.argmax(), shaped_image.shape)
+            shaped_image = shaped_image[i-self.visParams.zoom_width : i+self.visParams.zoom_width, 
+                                        j-self.visParams.zoom_width : j+self.visParams.zoom_width]
+
+        self.im = self.ax.imshow(shaped_image)
+
+        if self.visParams.lengthscale_um:
+
+            lengthScale = self.visParams.lengthscale_um / self.scale
+
+            self.scalebar = AnchoredSizeBar(
+                self.ax.transData,
+                lengthScale,
+                f'{lengthScale*self.scale:.0f} µm',
+                'lower right',
+                pad=1, sep=6,
+                color='white',frameon=False,
+                size_vertical=lengthScale/100,
+                fontproperties=self.fontprops
+            )
+
+            self.scalebar = self.ax.add_artist(self.scalebar)
+            self.ax.axis('off')
+
+    def _update_function(self, frame):
+        
+        t0 = time.time()
+        image_cam = self.cam.get_pending_frame_or_null()
+        poll_delay = time.time() - t0
+
+        if image_cam is None:
+            raise(ImageException(f"Frame {frame} not received"))
+        
+        t0 = time.time()
+        image_buffer = np.copy(image_cam.image_buffer)
+        shaped_image = image_buffer.reshape(self.cam.image_height_pixels, self.cam.image_width_pixels)
+        if self.visParams.zoom_bool:
+            i, j = np.unravel_index(shaped_image.argmax(), shaped_image.shape)
+            shaped_image = shaped_image[i-self.visParams.zoom_width : i+self.visParams.zoom_width, 
+                                        j-self.visParams.zoom_width : j+self.visParams.zoom_width]
+        treat_delay = time.time() - t0
+
+        t0 = time.time()
+        self.im.set_data(shaped_image)
+        plot_delay = time.time() - t0
+
+        if self.verbosity > 2:
+            col = Columns([f"polling: {poll_delay*1e3:>5.2f} ms", f"treating: {treat_delay*1e3:>5.2f} ms", f"plotting: {plot_delay*1e3:>5.2f} ms"])
+            self.cns.print(col)
+
+        if self.visParams.lengthscale_um:
+            return self.im, self.scalebar,
+        else:
+            return self.im,
+
+    def run(self):
+        """Launches the animation in real time."""
+
+        with TLCameraSDK() as self.sdk:
+            available_cameras = self.sdk.discover_available_cameras()
+            
+            if not len(available_cameras):
+                raise(CameraException("No cameras found."))
+            
+            with self.sdk.open_camera(available_cameras[0]) as self.cam:
+
+                self.cam.exposure_time_us = self.camParams.exposure_time_us
+                self.cam.frames_per_trigger_zero_for_unlimited = 0
+                self.cam.image_poll_timeout_ms = self.camParams.poll_timeout_ms
+                self.cam.is_frame_rate_control_enabled = self.camParams.frame_rate_control_enabled
+                self.cam.frame_rate_control_value = self.camParams.frame_rate_target
+
+                self.scale = self.cam.sensor_pixel_height_um / self.visParams.magnification
+
+                self.cam.arm(8)
+                self.cam.issue_software_trigger()
+
+                with self.cns.status(f"Imaging system running"):
+                    self._init_function()           # drawing first frame of the animation
+                    self.ani = FuncAnimation(
+                        fig = self.fig,
+                        func = self._update_function,
+                        frames = 100000,
+                        interval = 20,
+                        repeat = False,
+                        blit = True
+                    )
+                    plt.show()
+                
+                self.cam.disarm()
+
+class GaussianFitImaging(RealTimeImaging): ...
+
+class RFexpImaging(GaussianFitImaging): ...
+
+
+if __name__ == '__main__':
+
+    VisualizationGaussianParameters().rich_print(console=console)
