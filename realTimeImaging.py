@@ -25,10 +25,10 @@ console = Console(soft_wrap=True)
 install(console=console, show_locals=True)
 
 # Personnal library imports (from utils)
-from utils.pygauss import gaussianFit
+from utils.pygauss import gaussianFit, gaussianCompute
 from utils.tl_camera import TLCamera, TLCameraSDK
 try:
-    from utils.windows_setup import configure_path
+    from utils import configure_path
     configure_path("./thorlabs_dlls")
 except ImportError:
     configure_path = None
@@ -111,7 +111,7 @@ class VisualizationParameters:
     magnification: float = 1.
     lengthscale_um: int | None = None
     zoom_bool: bool = True
-    zoom_width: int | None = 50
+    zoom_width: int | None = 100
 
 
     def rich_print(self, console: Console):
@@ -138,9 +138,10 @@ class VisualizationParameters:
 @dataclass
 class VisualizationGaussianParameters(VisualizationParameters):
 
-    downscale_bool: bool = True
+    downscale_bool: bool = False
     downscale_order: int = 5
     gaussian_filter_sigma: int = 3
+    gaussian_fitting: bool = False
 
     def rich_print(self, console: Console):
 
@@ -156,6 +157,7 @@ class VisualizationGaussianParameters(VisualizationParameters):
         if self.downscale_bool:
             console.print(f"Downscaling order:                     {self.downscale_order:>10d} px")
         console.print(f"Gaussian filter stdev:                 {self.gaussian_filter_sigma:>10d} px")
+        console.print(f"Curve fitting with lstsquare?          {self.gaussian_fitting!s:>13}")
         console.print("\n\n")
 
 
@@ -215,8 +217,41 @@ class RealTimeImaging:
 
     def _update_function(self, frame): ...
 
-    def run(self): ...
+    def run(self):
+        """Launches the animation in real time."""
 
+        with TLCameraSDK() as self.sdk:
+            available_cameras = self.sdk.discover_available_cameras()
+            
+            if not len(available_cameras):
+                raise(CameraException("No cameras found."))
+            
+            with self.sdk.open_camera(available_cameras[0]) as self.cam:
+
+                self.cam.exposure_time_us = self.camParams.exposure_time_us
+                self.cam.frames_per_trigger_zero_for_unlimited = 0
+                self.cam.image_poll_timeout_ms = self.camParams.poll_timeout_ms
+                self.cam.is_frame_rate_control_enabled = self.camParams.frame_rate_control_enabled
+                self.cam.frame_rate_control_value = self.camParams.frame_rate_target
+
+                self.scale = self.scale * self.cam.sensor_pixel_height_um / self.visParams.magnification
+
+                self.cam.arm(8)
+                self.cam.issue_software_trigger()
+
+                with self.cns.status(f"Imaging system running"):
+                    self._init_function()           # drawing first frame of the animation
+                    self.ani = FuncAnimation(
+                        fig = self.fig,
+                        func = self._update_function,
+                        frames = 100000,
+                        interval = 20,
+                        repeat = False,
+                        blit = True
+                    )
+                    plt.show()
+                
+                self.cam.disarm()
 
 class SimpleImaging(RealTimeImaging):
     """
@@ -229,7 +264,7 @@ class SimpleImaging(RealTimeImaging):
 
     visParams : ``VisualizationParameters``, optional
         Parameters of the visualization (matplotlib) for the imaging.
-
+.
     console : ``rich.console.Console``, optional
         Console on which to print all informations.
 
@@ -305,47 +340,176 @@ class SimpleImaging(RealTimeImaging):
         else:
             return self.im,
 
-    def run(self):
-        """Launches the animation in real time."""
+class GaussianFitImaging(RealTimeImaging):
 
-        with TLCameraSDK() as self.sdk:
-            available_cameras = self.sdk.discover_available_cameras()
+    def __init__(
+            self,
+            camParams: CameraParameters = CameraParameters(),
+            visParams: VisualizationParameters = VisualizationGaussianParameters(),
+            console: Console = Console(),
+            verbosity: int = 2
+    ):
+
+        super().__init__(camParams=camParams, visParams=visParams, console=console, verbosity=verbosity)
+        
+        if self.visParams.downscale_bool:
+            self.scale = self.scale * self.visParams.downscale_order
+        
+        # Fitting parameters
+        self.x0: float = 0.
+        self.y0: float = 0.
+        self.sigmax: float = 0.
+        self.sigmay: float = 0.
+        self.theta: float = 0.
+        self.text: str = ""
+
+        # Plot 
+        self.contour: mpl.contour.QuadContourSet | None = None
+        self.textbox: mpl.text.Text | None = None
+
+    def _make_parameters_text(self):
+
+        text = r"$w_x$" + f" = {2*self.sigmax*self.scale:>1.1f} µm\n"
+        text+= r"$w_y$" + f" = {2*self.sigmay*self.scale:>1.1f} µm\n"
+        text+= r"$w_0$" + f" = {(self.sigmax+self.sigmay)*self.scale:>1.1f} µm\n"
+        text+= r"$\theta$  " + f" = {self.theta:>6.1f} °"
+
+        self.text = text
+
+    def _init_function(self):
+
+        image_cam = self.cam.get_pending_frame_or_null()
+
+        if image_cam is None: 
+            raise ImageException("Unable to acquire first image")
+        
+        image_buffer = np.copy(image_cam.image_buffer)
+        shaped_image = image_buffer.reshape(self.cam.image_height_pixels, self.cam.image_width_pixels)
+
+        if self.visParams.zoom_bool:
+            i, j = np.unravel_index(shaped_image.argmax(), shaped_image.shape)
+            shaped_image = shaped_image[i-self.visParams.zoom_width : i+self.visParams.zoom_width, 
+                                        j-self.visParams.zoom_width : j+self.visParams.zoom_width]
             
-            if not len(available_cameras):
-                raise(CameraException("No cameras found."))
+        self.im = self.ax.imshow(shaped_image)
             
-            with self.sdk.open_camera(available_cameras[0]) as self.cam:
+        if self.visParams.downscale_bool:
+            shaped_image = gaussian_filter(shaped_image, self.visParams.gaussian_filter_sigma)
+            shaped_image = shaped_image[:: self.visParams.downscale_order, :: self.visParams.downscale_order]
 
-                self.cam.exposure_time_us = self.camParams.exposure_time_us
-                self.cam.frames_per_trigger_zero_for_unlimited = 0
-                self.cam.image_poll_timeout_ms = self.camParams.poll_timeout_ms
-                self.cam.is_frame_rate_control_enabled = self.camParams.frame_rate_control_enabled
-                self.cam.frame_rate_control_value = self.camParams.frame_rate_target
+        # First gaussian calculation
+        popt, sim = gaussianCompute(shaped_image)
+        self.x0, self.y0, self.sigmax, self.sigmay, self.theta = popt
 
-                self.scale = self.cam.sensor_pixel_height_um / self.visParams.magnification
+        if self.visParams.gaussian_fitting:
+            popt, sim = gaussianFit(shaped_image, self.x0, self.y0, self.sigmax, self.sigmay, self.theta)
+            self.x0, self.y0, self.sigmax, self.sigmay, self.theta = popt
 
-                self.cam.arm(8)
-                self.cam.issue_software_trigger()
+        self._make_parameters_text()
 
-                with self.cns.status(f"Imaging system running"):
-                    self._init_function()           # drawing first frame of the animation
-                    self.ani = FuncAnimation(
-                        fig = self.fig,
-                        func = self._update_function,
-                        frames = 100000,
-                        interval = 20,
-                        repeat = False,
-                        blit = True
-                    )
-                    plt.show()
-                
-                self.cam.disarm()
+        if self.visParams.downscale_bool:
+            self.contour = self.ax.contour(sim[0]*self.visParams.downscale_order, sim[1]*self.visParams.downscale_order, sim[2], levels=5, colors='white')
+        else:
+            self.contour = self.ax.contour(*sim, levels=5, colors='white')
 
-class GaussianFitImaging(RealTimeImaging): ...
+        self.textbox = self.ax.text(.95,.95, self.text, transform=self.ax.transAxes, ha='right', va='top', bbox=dict(facecolor='white', edgecolor='k', boxstyle='Round'), fontsize=self.visParams.fontsize)
 
-class RFexpImaging(GaussianFitImaging): ...
+
+        if self.visParams.lengthscale_um:
+            
+            lengthScale = self.visParams.lengthscale_um / self.scale
+
+            if self.visParams.downscale_bool:
+                lengthScale *= self.visParams.downscale_order
+
+            self.scalebar = AnchoredSizeBar(
+                self.ax.transData,
+                lengthScale,
+                f'{self.visParams.lengthscale_um:.0f} µm',
+                'lower right',
+                pad=1, sep=6,
+                color='white',frameon=False,
+                size_vertical=lengthScale/100,
+                fontproperties=self.fontprops
+            )
+
+            self.scalebar = self.ax.add_artist(self.scalebar)
+            self.ax.axis('off')
+
+    def _update_function(self, frame):
+
+        t0 = time.time()
+        image_cam = self.cam.get_pending_frame_or_null()
+        poll_delay = time.time() - t0
+
+        if image_cam is None:
+            raise ImageException(f"Frame {frame} not received")
+        
+        t0 = time.time()
+        image_buffer = np.copy(image_cam.image_buffer)
+        shaped_image = image_buffer.reshape(self.cam.image_height_pixels, self.cam.image_width_pixels)
+        if self.visParams.zoom_bool:
+            i, j = np.unravel_index(shaped_image.argmax(), shaped_image.shape)
+            shaped_image = shaped_image[i-self.visParams.zoom_width : i+self.visParams.zoom_width, 
+                                        j-self.visParams.zoom_width : j+self.visParams.zoom_width]
+            
+        self.im.set_data(shaped_image)
+        image_delay = time.time() - t0
+
+        t0 = time.time()
+        if self.visParams.downscale_bool:
+            shaped_image = gaussian_filter(shaped_image, self.visParams.gaussian_filter_sigma)
+            shaped_image = shaped_image[::self.visParams.downscale_order, ::self.visParams.downscale_order]
+
+        if self.visParams.gaussian_fitting:
+            popt, sim = gaussianFit(shaped_image, self.x0, self.y0, self.sigmax, self.sigmay, self.theta)
+            self.x0, self.y0, self.sigmax, self.sigmay, self.theta = popt
+
+        else:
+            popt, sim = gaussianCompute(shaped_image)
+            self.x0, self.y0, self.sigmax, self.sigmay, self.theta = popt
+        fit_delay = time.time() - t0
+
+        t0 = time.time()
+        for coll in self.ax.collections:
+            coll.remove()
+        if self.visParams.downscale_bool:
+            self.contour = self.ax.contour(sim[0]*self.visParams.downscale_order, sim[1]*self.visParams.downscale_order, sim[2], levels=5, colors='white')
+        else:
+            self.contour = self.ax.contour(*sim, levels=5, colors='white')
+        self._make_parameters_text()
+        self.textbox.set_text(self.text)
+        contour_delay = time.time() - t0
+
+        if self.verbosity > 2:
+            col = Columns([f"polling: {poll_delay*1e3:>5.2f} ms", f"treating: {image_delay*1e3:>5.2f} ms", f"plotting: {contour_delay*1e3:>5.2f} ms"])
+            self.cns.print(col)
+
+        if self.visParams.lengthscale_um:
+            return self.im, self.contour, self.textbox, self.scalebar,
+        else:
+            return self.im, self.contour, self.textbox,
+
+
+class RFexpImaging(GaussianFitImaging): 
+
+    def _update_function(self, frame):
+        
+        super()._update_function(frame)
 
 
 if __name__ == '__main__':
 
-    VisualizationGaussianParameters().rich_print(console=console)
+    myVisParams = VisualizationGaussianParameters(
+        fontsize=20,
+        magnification=23,
+        lengthscale_um=100,
+        zoom_bool=False,
+        downscale_bool=True,
+        downscale_order=10,
+        gaussian_fitting=True
+    )
+
+    myAnim = GaussianFitImaging(visParams=myVisParams)
+    myAnim.rich_print_params()
+    myAnim.run()

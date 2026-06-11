@@ -7,13 +7,12 @@ console = Console()
 install(console=console, show_locals=True)
 
 
-
 @click.command()
 @click.option('-v','--verbosity', type=int, default=2, show_default=True, help="How much information you want the code to give, between 1 and 4.")
 @click.option('--exposure-time', type=int, default=1, show_default=True, help="Exposure time of the camera in µs.")
 @click.option('--magnification', type=float, default=23., show_default=True, help="The magnification of the imaging system.")
 @click.option("--lengthscale", type=int, default=None, show_default=True, help="The desired size for the scalebar.")
-@click.option("-z","--zoom-width", type=int, default=None, show_default=True, help="Half width of the zooming window around the point. If None, no zooming is performed.")
+@click.option("-z","--zoom-width", type=int, default=100, show_default=True, help="Half width of the zooming window around the point. If None, no zooming is performed.")
 def main(
     verbosity: int,
     exposure_time: int,

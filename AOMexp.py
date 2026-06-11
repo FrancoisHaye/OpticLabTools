@@ -20,7 +20,7 @@ from rich.traceback import install
 from rich.table import Table
 from rich.columns import Columns
 try:
-    from utils.windows_setup import configure_path
+    from utils._windows_setup import configure_path
     configure_path("./utils/thorlabs_dlls")
 except ImportError:
     configure_path = None
