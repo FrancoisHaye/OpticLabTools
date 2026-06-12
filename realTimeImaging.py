@@ -39,6 +39,7 @@ from utils.mogdevice import MOGDevice
 
 class CameraException(Exception): ...
 class ImageException(Exception): ...
+
 #%% Parameter classes
 
 @dataclass()
@@ -217,7 +218,7 @@ class RealTimeImaging:
 
     def _update_function(self, frame): ...
 
-    def run(self):
+    def run(self, number_of_frames: int = 10000, interval_ms: int = 20):
         """Launches the animation in real time."""
 
         with TLCameraSDK() as self.sdk:
@@ -244,13 +245,13 @@ class RealTimeImaging:
                     self.ani = FuncAnimation(
                         fig = self.fig,
                         func = self._update_function,
-                        frames = 100000,
-                        interval = 20,
+                        frames = number_of_frames,
+                        interval = interval_ms,
                         repeat = False,
-                        blit = True
+                        blit = False
                     )
                     plt.show()
-                
+            
                 self.cam.disarm()
 
 class SimpleImaging(RealTimeImaging):
@@ -490,26 +491,130 @@ class GaussianFitImaging(RealTimeImaging):
         else:
             return self.im, self.contour, self.textbox,
 
-
 class RFexpImaging(GaussianFitImaging): 
 
-    def _update_function(self, frame):
+    def __init__(
+            self,
+            mogDevice: MOGDevice,
+            camParams: CameraParameters = CameraParameters(),
+            visParams: VisualizationParameters = VisualizationGaussianParameters(),
+            console: Console = Console(),
+            verbosity: int = 2,
+            channel: int = 1,
+            freqRF: np.ndarray | list = np.arange(70, 91, 1)
+            ):
         
+        assert channel in [1, 2]
+
+        super().__init__(camParams=camParams, visParams=visParams, console=console, verbosity=verbosity)
+
+        self.mogdevice: MOGDevice = mogDevice
+        self.channel: int = channel
+        self.freqRF: np.ndarray | list = freqRF
+
+        # Stocking results of experiment
+        self.list_sigmax: list = []
+        self.list_sigmay: list = []
+        self.list_theta: list = []
+        self.list_intensity: list = []
+        self.list_positionx: list = []
+        self.list_positiony: list = []
+        
+        # Track last processed frame to avoid duplicates from animation initialization
+        self._last_frame_processed: int = -1
+
+    def _init_mog_device(self):
+
+        self.mogdevice.cmd('MODE,1,NSB')
+        self.mogdevice.cmd('MODE,2,NSB')
+
+        self.mogdevice.cmd('FREQ,1,80MHz')
+        self.mogdevice.cmd('FREQ,2,80MHz')
+
+        self.mogdevice.cmd('POWER,1,30dBm')
+        self.mogdevice.cmd('POWER,2,30dBm')
+
+        self.mogdevice.cmd('PHASE,1,0')
+        self.mogdevice.cmd('PHASE,2,0')
+
+        self.mogdevice.cmd('ON,1')
+        self.mogdevice.cmd("ON,2")
+
+        self.mogdevice.cmd('SYNC,on')
+
+        if self.verbosity>1:
+
+            tabMog = Table(caption="Mog Device Initialization")
+            tabMog.add_column('Channel', justify='left')
+            tabMog.add_column('Frequency', justify="right", highlight=True)
+            tabMog.add_column('Amplitude', justify="right", highlight=True)
+
+            tabMog.add_row("1", f"{float(self.mogdevice.ask("FREQ, 1").split("MHz")[0]):.1f} MHz", f"{float(self.mogdevice.ask("POW, 1").split("dBm")[0]):.1f} dBm")
+            tabMog.add_row("2", f"{float(self.mogdevice.ask("FREQ, 2").split("MHz")[0]):.1f} MHz", f"{float(self.mogdevice.ask("POW, 2").split("dBm")[0]):.1f} dBm")
+
+            self.cns.print(tabMog, justify='center')
+
+    def _init_function(self):
+
+        self._init_mog_device()
+        super()._init_function()
+
+    def _update_function(self, frame):
+
+        # Skip duplicate frame calls from animation initialization
+        if frame == self._last_frame_processed:
+            if self.visParams.lengthscale_um:
+                return self.im, self.contour, self.textbox, self.scalebar,
+            else:
+                return self.im, self.contour, self.textbox,
+        
+        self._last_frame_processed = frame
+
+        self.mogdevice.cmd(f"FREQ, {self.channel}, {self.freqRF[frame]}")
+        self.cns.print(f"Channel {self.channel} current frequency: {float(self.mogdevice.ask(f"FREQ, {self.channel}").split("MHz")[0]):>5.0f} MHz")
+
         super()._update_function(frame)
+
+        self.list_sigmax.append(self.sigmax)
+        self.list_sigmay.append(self.sigmay)
+        self.list_theta.append(self.theta)
+        self.list_intensity.append(self.im.get_array())
+        i, j = np.unravel_index(self.im.get_array().argmax(), self.im.get_array().shape)
+        self.list_positionx.append(j * self.scale)
+        self.list_positiony.append(i * self.scale)
+
+        # Schedule figure close after final frame via event loop
+        if frame == len(self.freqRF) - 1:
+            timer = self.fig.canvas.new_timer(interval=50)
+            timer.single_shot = True
+            timer.add_callback(plt.close, self.fig)
+            timer.start()
+
+        if self.visParams.lengthscale_um:
+            return self.im, self.contour, self.textbox, self.scalebar,
+        else:
+            return self.im, self.contour, self.textbox,
+
+    def run(self):
+
+        super().run(number_of_frames=len(self.freqRF), interval_ms=1)
 
 
 if __name__ == '__main__':
 
     myVisParams = VisualizationGaussianParameters(
-        fontsize=20,
+        fontsize=12,
         magnification=23,
-        lengthscale_um=100,
-        zoom_bool=False,
+        lengthscale_um=10,
+        zoom_bool=True,
+        zoom_width=50,
         downscale_bool=True,
-        downscale_order=10,
-        gaussian_fitting=True
+        downscale_order=1,
+        gaussian_fitting=True,
+        gaussian_filter_sigma=1
     )
 
-    myAnim = GaussianFitImaging(visParams=myVisParams)
+    myMogDevice = MOGDevice("COM", 7)
+    myAnim = RFexpImaging(myMogDevice, visParams=myVisParams, verbosity=2)
     myAnim.rich_print_params()
     myAnim.run()
