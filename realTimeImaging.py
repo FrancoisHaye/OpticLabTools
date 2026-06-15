@@ -513,8 +513,8 @@ class RFexpImaging(GaussianFitImaging):
         self.freqRF: np.ndarray | list = freqRF
 
         # Stocking results of experiment
-        self.list_sigmax: list = []
-        self.list_sigmay: list = []
+        self.list_wx: list = []
+        self.list_wy: list = []
         self.list_theta: list = []
         self.list_intensity: list = []
         self.list_positionx: list = []
@@ -541,6 +541,8 @@ class RFexpImaging(GaussianFitImaging):
         self.mogdevice.cmd("ON,2")
 
         self.mogdevice.cmd('SYNC,on')
+
+        self.mogdevice.cmd(f'FREQ,{self.channel},{self.freqRF[0]}')
 
         if self.verbosity>1:
 
@@ -571,24 +573,19 @@ class RFexpImaging(GaussianFitImaging):
         self._last_frame_processed = frame
 
         self.mogdevice.cmd(f"FREQ, {self.channel}, {self.freqRF[frame]}")
-        self.cns.print(f"Channel {self.channel} current frequency: {float(self.mogdevice.ask(f"FREQ, {self.channel}").split("MHz")[0]):>5.0f} MHz")
+        if self.verbosity > 2: self.cns.print(f"Channel {self.channel} current frequency: {float(self.mogdevice.ask(f"FREQ, {self.channel}").split("MHz")[0]):>5.0f} MHz")
 
         super()._update_function(frame)
 
-        self.list_sigmax.append(self.sigmax)
-        self.list_sigmay.append(self.sigmay)
+        self.list_intensity.append(self.im.get_array().max())
+        self.list_positionx.append(self.x0 * self.scale)
+        self.list_positiony.append(self.y0 * self.scale)
+        self.list_wx.append(2 * self.sigmax * self.scale)
+        self.list_wy.append(2 * self.sigmay * self.scale)
         self.list_theta.append(self.theta)
-        self.list_intensity.append(self.im.get_array())
-        i, j = np.unravel_index(self.im.get_array().argmax(), self.im.get_array().shape)
-        self.list_positionx.append(j * self.scale)
-        self.list_positiony.append(i * self.scale)
 
-        # Schedule figure close after final frame via event loop
-        if frame == len(self.freqRF) - 1:
-            timer = self.fig.canvas.new_timer(interval=50)
-            timer.single_shot = True
-            timer.add_callback(plt.close, self.fig)
-            timer.start()
+        if frame == len(self.freqRF) - 1: #last frame
+            self.cns.print(":warning:  [bold red]Experiment over, please close the figure.[/]")
 
         if self.visParams.lengthscale_um:
             return self.im, self.contour, self.textbox, self.scalebar,
@@ -599,22 +596,15 @@ class RFexpImaging(GaussianFitImaging):
 
         super().run(number_of_frames=len(self.freqRF), interval_ms=1)
 
+    def get_results(self):
 
-if __name__ == '__main__':
+        if self.verbosity > 1:
 
-    myVisParams = VisualizationGaussianParameters(
-        fontsize=12,
-        magnification=23,
-        lengthscale_um=10,
-        zoom_bool=True,
-        zoom_width=50,
-        downscale_bool=True,
-        downscale_order=1,
-        gaussian_fitting=True,
-        gaussian_filter_sigma=1
-    )
+            tab = Table('frequency [MHz]', 'Intensity', 'x0 [µm]', 'y0 [µm]', 'wx [µm]', 'wy [µm]', 'theta [°]', highlight=True)
 
-    myMogDevice = MOGDevice("COM", 7)
-    myAnim = RFexpImaging(myMogDevice, visParams=myVisParams, verbosity=2)
-    myAnim.rich_print_params()
-    myAnim.run()
+            for i in range(0, len(self.list_intensity), 10):
+                tab.add_row(f"{self.freqRF[i]:.1f}", f"{self.list_intensity[i]:.0f}", f"{self.list_positionx[i]:.1f}", f"{self.list_positiony[i]:.1f}", f"{self.list_wx[i]:.1f}", f"{self.list_wy[i]:.1f}", f"{self.list_theta[i]:.0f}")
+            
+            self.cns.print(tab)
+
+        return self.freqRF, self.list_intensity, self.list_positionx, self.list_positiony, self.list_wx, self.list_wy, self.list_theta
