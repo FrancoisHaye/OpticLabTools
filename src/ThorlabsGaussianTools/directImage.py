@@ -1,7 +1,15 @@
+"""
+``directImage``
+===============
+
+Providing the CLI tool for direct imaging without fitting of freq modification.
+
+"""
+
 import click
 from rich.console import Console
 from rich.traceback import install
-from realTimeImaging import SimpleImaging, CameraParameters, VisualizationParameters
+from src.ThorlabsGaussianTools.realTimeImaging import SimpleImaging, CameraParameters, VisualizationParameters
 
 console = Console()
 install(console=console, show_locals=True)

@@ -1,8 +1,18 @@
+"""
+``aomCalibration``
+==================
+
+Providing CLI tool for the movement of the point with only ONE AOM (select channel 1 or 2).
+
+"""
+
+
+
 import click
 import numpy as np
 import matplotlib.pyplot as plt
-from realTimeImaging import VisualizationGaussianParameters, RFexpImaging
-from utils.mogdevice import MOGDevice
+from src.ThorlabsGaussianTools.realTimeImaging import VisualizationGaussianParameters, RFexpImaging
+from src.ThorlabsGaussianTools.utils.mogdevice import MOGDevice
 from rich.console import Console
 from rich.traceback import install
 

@@ -1,7 +1,15 @@
+"""
+``gaussianFit``
+===============
+
+Providing CLI tool for imaging and gaussian fitting, with various parameters.
+
+"""
+
 import click
 from rich.console import Console
 from rich.traceback import install
-from realTimeImaging import GaussianFitImaging, CameraParameters, VisualizationGaussianParameters
+from src.ThorlabsGaussianTools.realTimeImaging import GaussianFitImaging, CameraParameters, VisualizationGaussianParameters
 
 console = Console()
 install(console=console, show_locals=False)

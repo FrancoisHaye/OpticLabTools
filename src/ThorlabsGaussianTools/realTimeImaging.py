@@ -1,11 +1,9 @@
-"""
-Module providing an RealTimeAnimation class for imaging in real time the output of a ThorLabs camera
-"""
+"""Coding UTF-8"""
 
 #%% Introduction - imports and configuration
 
 # classical imports
-from dataclasses import dataclass, astuple
+from dataclasses import dataclass
 from functools import partial
 import numpy as np
 from scipy.ndimage import gaussian_filter
@@ -25,14 +23,14 @@ console = Console(soft_wrap=True)
 install(console=console, show_locals=True)
 
 # Personnal library imports (from utils)
-from utils.pygauss import gaussianFit, gaussianCompute
-from utils.tl_camera import TLCamera, TLCameraSDK
+from .utils.pygauss import gaussianFit, gaussianCompute
+from .utils.tl_camera import TLCamera, TLCameraSDK
 try:
-    from utils import configure_path
+    from .utils import configure_path
     configure_path("./thorlabs_dlls")
 except ImportError:
     configure_path = None
-from utils.mogdevice import MOGDevice
+from .utils.mogdevice import MOGDevice
 
 
 #%% Exception classes
