@@ -103,13 +103,21 @@ class VisualizationParameters:
     lengthscale_um : ``int`` or ``None``, optional
         The length of the scalebar plotted on the image in µm.
         default = None
+
+    zoom_bool : ``bool``, optional
+        Whether to zoom around the gaussian beam.
+        default = False
+
+    zoom_width : ``int``, optional
+        The half-width of the zoom in pixels. The final image will be centered on the gaussian beam, with a width of 2*zoom_width.
+        default = 100
     
     """
     
     fontsize: int = 12
     magnification: float = 1.
     lengthscale_um: int | None = None
-    zoom_bool: bool = True
+    zoom_bool: bool = False
     zoom_width: int | None = 100
 
 
@@ -136,6 +144,48 @@ class VisualizationParameters:
 
 @dataclass
 class VisualizationGaussianParameters(VisualizationParameters):
+    """
+    subclass of ``VisualizationParameters`` taking into account gaussian fitting parameters.
+    
+    Parameters
+    ----------
+    fontsize : ``int``, optional
+        The fontsize for the plot.
+        default = 12
+        
+    magnification : ``float``, optional
+        The magnification of the imaging system used before the camera. This is used to compute a scalebar on the plot.
+        default = 1.
+
+    lengthscale_um : ``int`` or ``None``, optional
+        The length of the scalebar plotted on the image in µm.
+        default = None
+
+    zoom_bool : ``bool``, optional
+        Whether to zoom around the gaussian beam.
+        default = True
+
+    zoom_width : ``int``, optional
+        The half-width of the zoom in pixels. The final image will be centered on the gaussian beam, with a width of 2*zoom_width.
+        default = 100
+
+    downscale_bool : ``bool``, optional
+        Whether to perform a downscaling step of the image to increase performances at the cost of fitting precision.
+        default = False
+
+    downscale_order : ``int``, optional
+        The order of the downscaling, in pixels. This corresponds to the number of pixels _skipped_ for one final pixel (e.g. 1 pixel over 3 for an order of 3).
+        default = 5
+
+    gaussian_filter_sigma : ``int``, optional
+        The stdev of the gaussian for the filter before downscaling, in pixels. Filtering is important for antialiasing when downscaling, but a value too large results in overestimation of the waist of the beam.
+        default = 3
+
+    gaussian_fitting : ``bool``, optional
+        Whether to perform a leastsquare fit of the gaussian beam with scipy.optimize.curve_fit or only a statistic calculation on the distribution. The latter allows better performances at the cost of real bad fitting values. For more information see https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit
+        default = False
+    
+    """
 
     downscale_bool: bool = False
     downscale_order: int = 5
@@ -170,12 +220,15 @@ class RealTimeImaging:
     ----------
     camParams : ``CameraParameters``, optional
         Parameters of the camera acquisition for the imaging.
+        default = CameraParameters()
 
     visParams : ``VisualizationParameters``, optional
         Parameters of the visualization (matplotlib) for the imaging.
+        default = VisualizationParameters()
 
     console : ``rich.console.Console``, optional
         Console on which to print all informations.
+        default = Console()
     
     verbosity : ``int``, optional
         Verbosity of the program, between 1 and 4.
@@ -217,7 +270,21 @@ class RealTimeImaging:
     def _update_function(self, frame): ...
 
     def run(self, number_of_frames: int = 10000, interval_ms: int = 20):
-        """Launches the animation in real time."""
+        """
+        Launches the animation in real time.
+        
+        Parameters
+        ----------
+        
+        number_of_frames: ``int``, optional
+            The number of frames to render. A low value will result in a very short imaging.
+            default = 10000
+
+        interval_ms : ``int``, optional
+            The interval between each call of the animation function, in ms. Performances can be impacted by other processes, resulting in a fps drop with respect to the expected value.
+            default = 20
+        
+        """
 
         with TLCameraSDK() as self.sdk:
             available_cameras = self.sdk.discover_available_cameras()
@@ -260,15 +327,18 @@ class SimpleImaging(RealTimeImaging):
     ----------
     camParams : ``CameraParameters``, optional
         Parameters of the camera acquisition for the imaging.
+        default = CameraParameters()
 
     visParams : ``VisualizationParameters``, optional
         Parameters of the visualization (matplotlib) for the imaging.
-.
+        default = VisualizationParameters()
+
     console : ``rich.console.Console``, optional
         Console on which to print all informations.
-
+        default = Console()
+    
     verbosity : ``int``, optional
-        verbosity of the program during the animation, between 1 and 4.
+        Verbosity of the program, between 1 and 4.
         default = 2
 
     """
@@ -340,6 +410,28 @@ class SimpleImaging(RealTimeImaging):
             return self.im,
 
 class GaussianFitImaging(RealTimeImaging):
+    """
+    ``RealTimeImaging`` subclass providing the image with a fitted 2D gaussian with the form of a textbox containing necessary informations, and a contour plot of the gaussian for visual check.
+    
+    Parameters
+    ----------
+    camParams : ``CameraParameters``, optional
+        Parameters of the camera acquisition for the imaging.
+        default = CameraParameters()
+
+    visParams : ``VisualizationParameters``, optional
+        Parameters of the visualization (matplotlib) for the imaging.
+        default = VisualizationGaussianParameters()
+
+    console : ``rich.console.Console``, optional
+        Console on which to print all informations.
+        default = Console()
+    
+    verbosity : ``int``, optional
+        Verbosity of the program, between 1 and 4.
+        default = 2
+        
+    """
 
     def __init__(
             self,
@@ -489,26 +581,58 @@ class GaussianFitImaging(RealTimeImaging):
         else:
             return self.im, self.contour, self.textbox,
 
-class RFexpImaging(GaussianFitImaging): 
+class RFanim(GaussianFitImaging):
+    """
+    ``GaussianFitImaging`` subclass providing support for moving the gaussian defect by changing the frequencies of the AOMS.
+
+    Parameters
+    ----------
+
+    mogPort : ``int``
+        The port in which the Moglabs XRF is connected. Use mogrf app to determine the port.
+
+    freqRF1 : ``np.ndarray`` or ``list``, optional
+        The (ordered) frequencies you want the channel 1 of the RF synthetizer to take during the imaging, in MHz.
+        default = ``np.linspace(70, 90, 20)``
+
+    freqRF2 : ``np.ndarray`` or ``list``, optional
+        The (ordered) frequencies you want the channel 2 of the RF synthetizer to take during the imaging, in MHz.
+        default = ``np.linspace(70, 90, 20)``
+
+    camParams : ``CameraParameters``, optional
+        Parameters of the camera acquisition for the imaging.
+
+    visParams : ``VisualizationParameters``, optional
+        Parameters of the visualization (matplotlib) for the imaging.
+
+    console : ``rich.console.Console``, optional
+        Console on which to print all informations.
+
+    verbosity : ``int``, optional
+        verbosity of the program during the animation, between 1 and 4.
+        default = 2
+
+    """
 
     def __init__(
             self,
-            mogDevice: MOGDevice,
+            mogPort: int,
+            freqRF1: np.ndarray | list = np.linspace(70, 90, 20),
+            freqRF2: np.ndarray | list = np.linspace(70, 90, 20),
             camParams: CameraParameters = CameraParameters(),
             visParams: VisualizationParameters = VisualizationGaussianParameters(),
             console: Console = Console(),
-            verbosity: int = 2,
-            channel: int = 1,
-            freqRF: np.ndarray | list = np.arange(70, 91, 1)
+            verbosity: int = 2
             ):
         
-        assert channel in [1, 2]
+        assert len(freqRF1) == len(freqRF2)
+        
 
         super().__init__(camParams=camParams, visParams=visParams, console=console, verbosity=verbosity)
 
-        self.mogdevice: MOGDevice = mogDevice
-        self.channel: int = channel
-        self.freqRF: np.ndarray | list = freqRF
+        self.mogdevice: MOGDevice = MOGDevice("COM", port=mogPort)
+        self.freqRF1: np.ndarray | list = freqRF1
+        self.freqRF2: np.ndarray | list = freqRF2
 
         # Stocking results of experiment
         self.list_wx: list = []
@@ -540,7 +664,8 @@ class RFexpImaging(GaussianFitImaging):
 
         self.mogdevice.cmd('SYNC,on')
 
-        self.mogdevice.cmd(f'FREQ,{self.channel},{self.freqRF[0]}')
+        self.mogdevice.cmd(f'FREQ,1,{self.freqRF1[0]}')
+        self.mogdevice.cmd(f'FREQ,2,{self.freqRF2[0]}')
 
         if self.verbosity>1:
 
@@ -570,8 +695,11 @@ class RFexpImaging(GaussianFitImaging):
         
         self._last_frame_processed = frame
 
-        self.mogdevice.cmd(f"FREQ, {self.channel}, {self.freqRF[frame]}")
-        if self.verbosity > 2: self.cns.print(f"Channel {self.channel} current frequency: {float(self.mogdevice.ask(f"FREQ, {self.channel}").split("MHz")[0]):>5.0f} MHz")
+        self.mogdevice.cmd(f"FREQ,1,{self.freqRF1[frame]}")
+        self.mogdevice.cmd(f"FREQ,2,{self.freqRF2[frame]}")
+        if self.verbosity > 2: 
+            self.cns.print(f"Channel {1:.d} current frequency: {float(self.mogdevice.ask(f"FREQ, 1").split("MHz")[0]):>5.0f} MHz")
+            self.cns.print(f"Channel {2:.d} current frequency: {float(self.mogdevice.ask(f"FREQ, 2").split("MHz")[0]):>5.0f} MHz")
 
         super()._update_function(frame)
 
@@ -591,18 +719,43 @@ class RFexpImaging(GaussianFitImaging):
             return self.im, self.contour, self.textbox,
 
     def run(self):
+        """Launches the animation. You need to close the matplotlib figure at the end."""
 
-        super().run(number_of_frames=len(self.freqRF), interval_ms=1)
+        super().run(number_of_frames=len(self.freqRF1), interval_ms=1)
 
     def get_results(self):
+        """
+        Returns all values of gaussian defect parameters during imaging, and eventually prints the results in a table.
+        
+        Returns
+        -------
+        
+        freqRF1, freqRF2 : ``np.ndarray`` or ``list``
+            The frequencies of the AOMs at each animation step, in MHz.
+
+        intensities : ``list``
+            The maximum intensity of the gaussian defect, in a.u.
+
+        x0, y0 : ``list``
+            The positions of the center of the beam, in µm.
+
+        wx, wy : ``list``
+            The waists of the beam in two principal directions, in µm.
+
+        theta : ``list``
+            The angle that the elliptic gaussian beam makes with the x-axis of the camera, in degrees.
+
+        """
 
         if self.verbosity > 1:
 
-            tab = Table('frequency [MHz]', 'Intensity', 'x0 [µm]', 'y0 [µm]', 'wx [µm]', 'wy [µm]', 'theta [°]', highlight=True)
+            tab = Table('frequency x [MHz]', 'frequency y [MHz]', 'Intensity', 'x0 [µm]', 'y0 [µm]', 'wx [µm]', 'wy [µm]', 'theta [°]', highlight=True)
 
             for i in range(0, len(self.list_intensity), 10):
-                tab.add_row(f"{self.freqRF[i]:.1f}", f"{self.list_intensity[i]:.0f}", f"{self.list_positionx[i]:.1f}", f"{self.list_positiony[i]:.1f}", f"{self.list_wx[i]:.1f}", f"{self.list_wy[i]:.1f}", f"{self.list_theta[i]:.0f}")
+                tab.add_row(f"{self.freqRF[i]:.1f}", f"{self.freqRF2[i]:.1f}", f"{self.list_intensity[i]:.0f}", f"{self.list_positionx[i]:.1f}", f"{self.list_positiony[i]:.1f}", f"{self.list_wx[i]:.1f}", f"{self.list_wy[i]:.1f}", f"{self.list_theta[i]:.0f}")
             
             self.cns.print(tab)
 
-        return self.freqRF, self.list_intensity, self.list_positionx, self.list_positiony, self.list_wx, self.list_wy, self.list_theta
+        return self.freqRF1, self.freqRF2, self.list_intensity, self.list_positionx, self.list_positiony, self.list_wx, self.list_wy, self.list_theta
+
+
