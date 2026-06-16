@@ -1,0 +1,4 @@
+[console_scripts]
+AOMcal = ThorlabsGaussianTools.aomCalibration:main
+gaussian = ThorlabsGaussianTools.gaussianFit:main
+imaging = ThorlabsGaussianTools.directImage:main
