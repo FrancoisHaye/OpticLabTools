@@ -22,7 +22,7 @@ install(console=console, show_locals=False)
 @click.option("--lengthscale", type=int, default=10, show_default=True, help="The desired size for the scalebar, in µm.")
 @click.option("-z","--zoom-width", type=int, default=100, show_default=True, help="Half width of the zooming window around the point. If None, no zooming is performed.")
 @click.option("-ds", "--downscale", type=int, default=None, show_default=True, help="Order of downscaling, in pixels. If None, no downscaling.")
-@click.option("--gaussian-fit/--no-gaussian-fit", type=bool, default=True, show_dfault=True, help="Whether to perform a lstsq fit of the gaussian or only a small calculation.")
+@click.option("--gaussian-fit/--no-gaussian-fit", type=bool, default=True, show_default=True, help="Whether to perform a lstsq fit of the gaussian or only a small calculation.")
 def main(
     verbosity: int,
     exposure_time: int,
