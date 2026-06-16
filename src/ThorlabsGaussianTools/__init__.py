@@ -31,4 +31,4 @@ Imaging classes
 
 """
 
-from .realTimeImaging import *
+from ._real_time_imaging import *

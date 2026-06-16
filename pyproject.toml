@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools >= 82.0.1"]
+build-backend = "setuptools.build_meta"
+
+
+
+[tools.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = "ThorlabsGaussianTools"
+version = "0.0.1"
+authors = [
+	{ name = "Francois HAYE", email = "francois.haye@espci.fr" },
+]
+description = "Various lab utilities for Thorlabs cameras and gaussian beams."
+keywords = ["thorlabs", "imaging", "camera", "gaussian", "beam", "optics"]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+	"click>=8.4.1",
+	"rich>=15.0.0",
+	"numpy>=2.4.6",
+	"matplotlib>=3.11.0",
+	"scipy>=1.17.1",
+	"pyserial>=3.5",
+	"six>=1.17.0"
+]
+classifiers = [
+	"Development Status :: 3 - Alpha",
+	"Programming Language :: Python :: 3",
+	"Operating System :: OS independent",
+]
+license = "MIT"
+license-files = ["LICENSE"]
+
+[project.scripts]
+imaging = "ThorlabsGaussianTools.directImage:main"
+gaussian = "ThorlabsGaussianTools.gaussianFit:main"
+AOMcal = "ThorlabsGaussianTools.aomCalibration:main"
