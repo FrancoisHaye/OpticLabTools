@@ -259,6 +259,7 @@ class RealTimeImaging:
         self.scale: float = 1.
 
         self.fontprops = mpl.font_manager.FontProperties(size=self.visParams.fontsize)
+        self.max_frames: int = 0
 
     def rich_print_params(self):
         """Pretty prints the parameters of the imaging."""
@@ -285,6 +286,8 @@ class RealTimeImaging:
             default = 20
         
         """
+
+        self.max_frames = number_of_frames
 
         with TLCameraSDK() as self.sdk:
             available_cameras = self.sdk.discover_available_cameras()
@@ -316,6 +319,7 @@ class RealTimeImaging:
                         blit = False
                     )
                     plt.show()
+                    plt.close()
             
                 self.cam.disarm()
 
@@ -379,6 +383,10 @@ class SimpleImaging(RealTimeImaging):
             self.ax.axis('off')
 
     def _update_function(self, frame):
+
+        if frame == self.max_frames - 1 :
+            self.ani.event_source.stop()
+            plt.close()
         
         t0 = time.time()
         image_cam = self.cam.get_pending_frame_or_null()
@@ -528,6 +536,10 @@ class GaussianFitImaging(RealTimeImaging):
             self.ax.axis('off')
 
     def _update_function(self, frame):
+
+        if frame == self.max_frames - 1 :
+            self.ani.event_source.stop()
+            plt.close()
 
         t0 = time.time()
         image_cam = self.cam.get_pending_frame_or_null()
@@ -710,8 +722,10 @@ class RFanim(GaussianFitImaging):
         self.list_wy.append(2 * self.sigmay * self.scale)
         self.list_theta.append(self.theta)
 
-        if frame == len(self.freqRF) - 1: #last frame
-            self.cns.print(":warning:  [bold red]Experiment over, please close the figure.[/]")
+        """if frame == len(self.freqRF1) - 1: #last frame
+            self.cns.print(":warning:  [bold red]Experiment over, Figure closing...[/]")
+            self.ani.event_source.stop()
+            plt.close()"""
 
         if self.visParams.lengthscale_um:
             return self.im, self.contour, self.textbox, self.scalebar,
@@ -721,7 +735,13 @@ class RFanim(GaussianFitImaging):
     def run(self):
         """Launches the animation. You need to close the matplotlib figure at the end."""
 
-        super().run(number_of_frames=len(self.freqRF1), interval_ms=1)
+        self.max_frames = len(self.freqRF1)
+
+        super().run(number_of_frames=self.max_frames, interval_ms=1)
+        self.mogdevice.cmd('FREQ,1,80')
+        self.mogdevice.cmd("FREQ,2,80")
+        self.mogdevice.cmd('POW,1,30 dBm')
+        self.mogdevice.cmd('POW,2,30 dBm')
 
     def get_results(self):
         """
@@ -749,12 +769,14 @@ class RFanim(GaussianFitImaging):
 
         if self.verbosity > 1:
 
-            tab = Table('frequency x [MHz]', 'frequency y [MHz]', 'Intensity', 'x0 [µm]', 'y0 [µm]', 'wx [µm]', 'wy [µm]', 'theta [°]', highlight=True)
+            tab = Table('frequency x [MHz]', 'frequency y [MHz]', 'Intensity', 'x0 [µm]', 'y0 [µm]', 'wx [µm]', 'wy [µm]', 'theta [°]', highlight=True, caption="Gaussian beam evolution")
 
             for i in range(0, len(self.list_intensity), 10):
-                tab.add_row(f"{self.freqRF[i]:.1f}", f"{self.freqRF2[i]:.1f}", f"{self.list_intensity[i]:.0f}", f"{self.list_positionx[i]:.1f}", f"{self.list_positiony[i]:.1f}", f"{self.list_wx[i]:.1f}", f"{self.list_wy[i]:.1f}", f"{self.list_theta[i]:.0f}")
+                tab.add_row(f"{self.freqRF1[i]:.1f}", f"{self.freqRF2[i]:.1f}", f"{self.list_intensity[i]:.0f}", f"{self.list_positionx[i]:.1f}", f"{self.list_positiony[i]:.1f}", f"{self.list_wx[i]:.1f}", f"{self.list_wy[i]:.1f}", f"{self.list_theta[i]:.0f}")
             
+            self.cns.print('\n')
             self.cns.print(tab)
+            self.cns.print("\n")
 
         return self.freqRF1, self.freqRF2, self.list_intensity, self.list_positionx, self.list_positiony, self.list_wx, self.list_wy, self.list_theta
 

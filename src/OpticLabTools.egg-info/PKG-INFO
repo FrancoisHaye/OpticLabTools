@@ -1,5 +1,5 @@
 Metadata-Version: 2.4
-Name: ThorlabsGaussianTools
+Name: OpticLabTools
 Version: 0.0.1
 Summary: Various lab utilities for Thorlabs cameras and gaussian beams.
 Author-email: Francois HAYE <francois.haye@espci.fr>

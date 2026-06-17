@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [project]
-name = "ThorlabsGaussianTools"
+name = "OpticLabTools"
 version = "0.0.1"
 authors = [
 	{ name = "Francois HAYE", email = "francois.haye@espci.fr" },
