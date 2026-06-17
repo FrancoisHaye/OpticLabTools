@@ -584,9 +584,10 @@ class GaussianFitImaging(RealTimeImaging):
         self.textbox.set_text(self.text)
         contour_delay = time.time() - t0
 
-        if self.verbosity > 2:
-            col = Columns([f"polling: {poll_delay*1e3:>5.2f} ms", f"treating: {image_delay*1e3:>5.2f} ms", f"plotting: {contour_delay*1e3:>5.2f} ms"])
+        if self.verbosity > 3:
+            col = Columns([f"polling: {poll_delay*1e3:>5.2f} ms", f"image process: {image_delay*1e3:>5.2f} ms", f"fitting: {fit_delay*1e3:>5.2f} ms", f"plotting: {contour_delay*1e3:>5.2f} ms"], expand=True)
             self.cns.print(col)
+            self.cns.print("\n")
 
         if self.visParams.lengthscale_um:
             return self.im, self.contour, self.textbox, self.scalebar,
@@ -607,9 +608,17 @@ class RFanim(GaussianFitImaging):
         The (ordered) frequencies you want the channel 1 of the RF synthetizer to take during the imaging, in MHz.
         default = ``np.linspace(70, 90, 20)``
 
+    powRF1 : ``np.ndarray`` or ``list``, optional
+        The (ordered) power you want the channel 1 of the RF synthetizer to take during the imaging, in dBm.
+        default = ``30*np.ones(20)``
+
     freqRF2 : ``np.ndarray`` or ``list``, optional
         The (ordered) frequencies you want the channel 2 of the RF synthetizer to take during the imaging, in MHz.
         default = ``np.linspace(70, 90, 20)``
+
+    powRF2 : ``np.ndarray`` or ``list``, optional
+        The (ordered) power you want the channel 2 of the RF synthetizer to take during the imaging, in dBm.
+        default = ``30*np.ones(20)``
 
     camParams : ``CameraParameters``, optional
         Parameters of the camera acquisition for the imaging.
@@ -630,7 +639,9 @@ class RFanim(GaussianFitImaging):
             self,
             mogPort: int,
             freqRF1: np.ndarray | list = np.linspace(70, 90, 20),
+            powRF1: np.ndarray | list | None = None,
             freqRF2: np.ndarray | list = np.linspace(70, 90, 20),
+            powRF2: np.ndarray | list | None = None,
             camParams: CameraParameters = CameraParameters(),
             visParams: VisualizationParameters = VisualizationGaussianParameters(),
             console: Console = Console(),
@@ -638,13 +649,22 @@ class RFanim(GaussianFitImaging):
             ):
         
         assert len(freqRF1) == len(freqRF2)
-        
+        if powRF1 is not None:
+            assert len(powRF1) == len(powRF2)
+            assert len(freqRF1) == len(powRF1)
 
         super().__init__(camParams=camParams, visParams=visParams, console=console, verbosity=verbosity)
 
         self.mogdevice: MOGDevice = MOGDevice("COM", port=mogPort)
         self.freqRF1: np.ndarray | list = freqRF1
         self.freqRF2: np.ndarray | list = freqRF2
+
+        if powRF1 is not None:
+            self.powRF1: np.ndarray | list = powRF1
+            self.powRF2: np.ndarray | list = powRF2
+        else:
+            self.powRF1 = 30*np.ones_like(self.freqRF1)
+            self.powRF2 = 30*np.ones_like(self.freqRF2)
 
         # Stocking results of experiment
         self.list_wx: list = []
@@ -677,7 +697,9 @@ class RFanim(GaussianFitImaging):
         self.mogdevice.cmd('SYNC,on')
 
         self.mogdevice.cmd(f'FREQ,1,{self.freqRF1[0]}')
+        self.mogdevice.cmd(f'POW,1,{self.powRF1[0]}')
         self.mogdevice.cmd(f'FREQ,2,{self.freqRF2[0]}')
+        self.mogdevice.cmd(f'POW,2,{self.powRF2[0]}')
 
         if self.verbosity>1:
 
@@ -708,10 +730,17 @@ class RFanim(GaussianFitImaging):
         self._last_frame_processed = frame
 
         self.mogdevice.cmd(f"FREQ,1,{self.freqRF1[frame]}")
+        self.mogdevice.cmd(f"POW,1,{self.powRF1[frame]}")
         self.mogdevice.cmd(f"FREQ,2,{self.freqRF2[frame]}")
-        if self.verbosity > 2: 
-            self.cns.print(f"Channel {1:.d} current frequency: {float(self.mogdevice.ask(f"FREQ, 1").split("MHz")[0]):>5.0f} MHz")
-            self.cns.print(f"Channel {2:.d} current frequency: {float(self.mogdevice.ask(f"FREQ, 2").split("MHz")[0]):>5.0f} MHz")
+        self.mogdevice.cmd(f'POW,2,{self.powRF2[frame]}')
+
+        if self.verbosity > 2:
+            
+            col1 = Columns([f"Channel {1:d}", f"freq {float(self.mogdevice.ask('FREQ, 1').split("MHz")[0]):>8.2f} MHz", f"pow {float(self.mogdevice.ask("POW,1").split("dBm")[0]):>8.2f} dBm"], expand=True)
+            col2 = Columns([f"Channel {2:d}", f"freq {float(self.mogdevice.ask('FREQ, 2').split("MHz")[0]):>8.2f} MHz", f"pow {float(self.mogdevice.ask("POW, 2").split("dBm")[0]):>8.2f} dBm"], expand=True)
+            self.cns.print(col1)
+            self.cns.print(col2)
+            self.cns.print('\n')
 
         super()._update_function(frame)
 
@@ -733,7 +762,7 @@ class RFanim(GaussianFitImaging):
             return self.im, self.contour, self.textbox,
 
     def run(self):
-        """Launches the animation. You need to close the matplotlib figure at the end."""
+        """Launches the animation."""
 
         self.max_frames = len(self.freqRF1)
 

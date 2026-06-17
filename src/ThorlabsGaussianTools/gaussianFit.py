@@ -22,7 +22,9 @@ install(console=console, show_locals=False)
 @click.option("--lengthscale", type=int, default=10, show_default=True, help="The desired size for the scalebar, in µm.")
 @click.option("-z","--zoom-width", type=int, default=100, show_default=True, help="Half width of the zooming window around the point. If None, no zooming is performed.")
 @click.option("-ds", "--downscale", type=int, default=None, show_default=True, help="Order of downscaling, in pixels. If None, no downscaling.")
+@click.option("-gs", "--gaussian-stdev", type=int, default=3, show_default=True, help = "stdev of the gaussian filter to apply, in pixels.")
 @click.option("--gaussian-fit/--no-gaussian-fit", type=bool, default=True, show_default=True, help="Whether to perform a lstsq fit of the gaussian or only a small calculation.")
+@click.option("-n", "--frame-number", type=int, default=1000, show_default=True, help="Number of frames to acquire.")
 def main(
     verbosity: int,
     exposure_time: int,
@@ -30,7 +32,9 @@ def main(
     lengthscale: int | None,
     zoom_width: int,
     downscale: int | None,
-    gaussian_fit: bool
+    gaussian_stdev: int,
+    gaussian_fit: bool,
+    frame_number: int
     ):
 
     assert verbosity>0 and verbosity<5
@@ -52,7 +56,7 @@ def main(
         zoom_width=zoom_width,
         downscale_bool=do_downscale,
         downscale_order=downscale,
-        gaussian_filter_sigma=3,
+        gaussian_filter_sigma=gaussian_stdev,
         gaussian_fitting=gaussian_fit
     )
 
@@ -65,7 +69,7 @@ def main(
 
     if verbosity>1: myAnim.rich_print_params()
 
-    myAnim.run()
+    myAnim.run(frame_number)
 
     console.rule('End of program')
 

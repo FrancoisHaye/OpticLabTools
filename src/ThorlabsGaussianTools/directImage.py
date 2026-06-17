@@ -21,12 +21,14 @@ install(console=console, show_locals=True)
 @click.option('--magnification', type=float, default=23., show_default=True, help="The magnification of the imaging system.")
 @click.option("--lengthscale", type=int, default=None, show_default=True, help="The desired size for the scalebar.")
 @click.option("-z","--zoom-width", type=int, default=100, show_default=True, help="Half width of the zooming window around the point. If None, no zooming is performed.")
+@click.option("-n", "--frame-number", type=int, default=1000, show_default=True, help="Number of frames to acquire.")
 def main(
     verbosity: int,
     exposure_time: int,
     magnification: float,
     lengthscale: int | None,
-    zoom_width: int
+    zoom_width: int,
+    frame_number: int
     ):
 
     assert verbosity>0 and verbosity<5
@@ -45,7 +47,7 @@ def main(
 
     if verbosity>1: myAnim.rich_print_params()
 
-    myAnim.run()
+    myAnim.run(frame_number)
 
     console.rule('End of program')
 

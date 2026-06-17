@@ -27,10 +27,12 @@ install(console=cns, show_locals=True)
 @click.option("--lengthscale", type=int, default=None, show_default=True, help="The desired size for the scalebar, in µm.")
 @click.option("-z","--zoom-width", type=int, default=None, show_default=True, help="Half width of the zooming window around the point. If None, no zooming is performed.")
 @click.option("-ds", "--downscale", type=int, default=5, show_default=True, help="Order of downscaling, in pixels. If None, no downscaling")
+@click.option("-gs", "--gaussian-stdev", type=int, default=3, show_default=True, help = "stdev of the gaussian filter to apply, in pixels.")
 @click.option("--mog-port", type=int, default=7, show_default=True, help="Port of the USB MogDevice. Use Mogrf.exe to get this value.")
 @click.option("-s", "--start-frequency", type=float, default=50, show_default=True, help="Starting frequency for the AOM frequency span.")
 @click.option("-e", "--end-frequency", type=float, default=110, show_default=True, help="End frequency of the span.")
 @click.option("-n", "--number-frequencies", type=int, default=1000, show_default=True, help="Number of frequencies for the span. A greater value means more precision but a longer execution time.")
+@click.option("--gaussian-fit/--no-gaussian-fit", type=bool, default=True, show_default=True, help="Whether to perform a lstsq fit of the gaussian or not.")
 def main(
     verbosity: int,
     exposure_time: int,
@@ -38,10 +40,12 @@ def main(
     lengthscale: int | None,
     zoom_width: int,
     downscale: int | None,
+    gaussian_stdev: int | None,
     mog_port: int,
     start_frequency: float,
     end_frequency: float,
-    number_frequencies: int
+    number_frequencies: int,
+    gaussian_fit: bool
 ):
     cns.print("\n\n")
     cns.rule("[bold]Calibration of AOMs")
@@ -64,8 +68,8 @@ def main(
         zoom_width=zoom_width,
         downscale_bool=doDownscale,
         downscale_order=downscale,
-        gaussian_fitting=True,
-        gaussian_filter_sigma=1
+        gaussian_fitting=gaussian_fit,
+        gaussian_filter_sigma=gaussian_stdev
         )
     
     myFreq = np.linspace(start_frequency, end_frequency, number_frequencies)
