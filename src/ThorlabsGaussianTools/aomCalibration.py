@@ -93,7 +93,6 @@ def main(
     cns.print(f"Results saved in {'AOMx.npz':>5}\nNow proceeding to the second AOM.")
 
     myAnimX.mogdevice.close()
-    del myAnimX
 
     myAnimY = RFanim(
         mogPort=mog_port,
@@ -109,8 +108,6 @@ def main(
     myAnimY.run()
     _, myFreqRF, myIntensity, myPositionx, myPositiony, myWx, myWy, myTheta = myAnimY.get_results()
     np.savez_compressed("AOMy",frequency=myFreqRF, intensity = myIntensity, positionx = myPositionx, positiony = myPositiony, wx = myWx, wy = myWy, theta = myTheta)
-
-    del myAnimY
 
     cns.print(f"Results saved in {'AOMy.npz':>5}\n\n")
     cns.rule()

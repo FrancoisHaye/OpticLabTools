@@ -253,6 +253,7 @@ class RealTimeImaging:
 
         self.im: mpl.image.AxesImage | None = None
         self.scalebar: AnchoredSizeBar | None = None
+        self.colorbar: mpl.colorbar.Colorbar | None = None
         self.ani: FuncAnimation | None = None
         self.sdk: TLCameraSDK | None = None
         self.cam: TLCamera | None = None
@@ -363,6 +364,7 @@ class SimpleImaging(RealTimeImaging):
                                         j-self.visParams.zoom_width : j+self.visParams.zoom_width]
 
         self.im = self.ax.imshow(shaped_image)
+        self.colorbar = self.fig.colorbar(self.im)
 
         if self.visParams.lengthscale_um:
 
@@ -491,6 +493,7 @@ class GaussianFitImaging(RealTimeImaging):
                                         j-self.visParams.zoom_width : j+self.visParams.zoom_width]
             
         self.im = self.ax.imshow(shaped_image)
+        self.colorbar = self.fig.colorbar(self.im)
             
         if self.visParams.downscale_bool:
             shaped_image = gaussian_filter(shaped_image, self.visParams.gaussian_filter_sigma)
