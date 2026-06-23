@@ -2,7 +2,8 @@
 requires = ["setuptools >= 82.0.1"]
 build-backend = "setuptools.build_meta"
 
-
+[tools.setuptools]
+include-package-data = true
 
 [tools.setuptools.packages.find]
 where = ["src"]
