@@ -30,5 +30,10 @@ Imaging classes
     RFexpImaging - subclass of GaussianFitImaging for the AOM experiment.
 
 """
+try:
+    from .utils import configure_path
+    configure_path("./thorlabs_dlls")
+except ImportError:
+    configure_path = None
 
 from ._real_time_imaging import *

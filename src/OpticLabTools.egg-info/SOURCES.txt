@@ -3,7 +3,9 @@ MANIFEST.in
 README.md
 pyproject.toml
 src/MogrfTools/__init__.py
+src/MogrfTools/_aom_calibration.py
 src/MogrfTools/_mogrf_utilities.py
+src/MogrfTools/launch_calibration.py
 src/OpticLabTools.egg-info/PKG-INFO
 src/OpticLabTools.egg-info/SOURCES.txt
 src/OpticLabTools.egg-info/dependency_links.txt
@@ -58,3 +60,4 @@ src/ThorlabsGaussianTools/utils/thorlabs_dlls/64_lib/thorlabs_tsi_polarization_p
 src/ThorlabsGaussianTools/utils/thorlabs_dlls/64_lib/thorlabs_tsi_polarization_processor_vector_avx512.dll
 src/ThorlabsGaussianTools/utils/thorlabs_dlls/64_lib/thorlabs_tsi_usb_hotplug_monitor.dll
 src/ThorlabsGaussianTools/utils/thorlabs_dlls/64_lib/thorlabs_tsi_zelux_camera_device.dll
+tests/test_calibration.py

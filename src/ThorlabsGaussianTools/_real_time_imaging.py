@@ -25,11 +25,6 @@ install(console=console, show_locals=True)
 # Personnal library imports (from utils)
 from .utils.pygauss import gaussianFit, gaussianCompute
 from .utils.tl_camera import TLCamera, TLCameraSDK
-try:
-    from .utils import configure_path
-    configure_path("./thorlabs_dlls")
-except ImportError:
-    configure_path = None
 from .utils.mogdevice import MOGDevice
 
 

@@ -4,8 +4,11 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from ThorlabsGaussianTools.utils.mogdevice import MOGDevice
+from rich.console import Console
 
 #TODO: Create a dataclass representing the path we want the point to follow
+# Tested: it works !!!
 
 @dataclass
 class Path:
@@ -33,14 +36,6 @@ class Path:
     central_freq : ``float``, optional
         The central frequency for AOM usage, in MHz.
         default = 80
-
-    x_pol : optional
-        The function giving the x position change (in µm) in function of the x frequency (in MHz).
-        default = np.polynomial.Polynomial((0,1))
-    
-    y_pol : optional
-        The function giving the y position change (in µm) in function of the y frequency (in MHz).
-        default = np.polynomial.Polynomial((0,1))
     
     """
 
@@ -49,8 +44,6 @@ class Path:
     y_frequencies: np.ndarray
     x_amplitudes: np.ndarray
     y_amplitudes: np.ndarray
-    x_pol = np.polynomial.Polynomial((0,1))
-    y_pol = np.polynomial.Polynomial((0,1))
 
     @classmethod
     def from_calibration(
@@ -59,6 +52,8 @@ class Path:
         amp_corr_y: function,
         x_pol: np.polynomial.Polynomial,
         y_pol: np.polynomial.Polynomial,
+        alpha: float,
+        beta: float,
         x_pos: np.ndarray,
         y_pos: np.ndarray,
         time_ms: np.ndarray
@@ -74,6 +69,12 @@ class Path:
         x_pol, y_pol : ``np.polynomial.Polynomial``
             1st order polynomial ``ax+b`` giving the relatioship between position and frequency.
 
+        alpha : ``float``
+            Angle between the two axis of the AOMs, in rad.
+
+        beta : ``float``
+            Angle between the x-axis of the AOM coordinate system and the x-axis of the camera, in rad.
+
         x_pos, y_pos : ``np.ndarray``
             Ordered list of the point positions, in µm.
 
@@ -82,30 +83,44 @@ class Path:
 
 
         """
-        #TODO: From a calibration result, get the functions giving amplitudes for each frequency and frequency for a given position
 
         b,a = x_pol.convert().coef
         x_pol_inv = np.polynomial.Polynomial((-b/a, 1/a))
         b,a = y_pol.convert().coef
         y_pol_inv = np.polynomial.Polynomial((-b/a, 1/a))
 
-        frequencies_x = x_pol_inv(x_pos)
-        frequencies_y = y_pol_inv(y_pos)
+        Rot = np.array([
+            [np.cos(beta), -np.sin(beta)],
+            [np.sin(beta), np.cos(beta)]
+        ])
+
+        strain = np.array([
+            [1, np.cos(alpha)],
+            [0, np.sin(alpha)]
+        ])
+
+        M = strain @ Rot
+
+        points = np.vstack((x_pos, y_pos))
+        new_points = np.linalg.solve(M, points)
+
+        frequencies_x = x_pol_inv(new_points[0, :])
+        frequencies_y = y_pol_inv(new_points[1, :])
         amplitudes_x = amp_corr_x(frequencies_x)
         amplitudes_y = amp_corr_y(frequencies_y)
 
-        cls(time_ms, frequencies_x, frequencies_y, amplitudes_x, amplitudes_y, x_pol, y_pol)
+        path = cls(time_ms, frequencies_x, frequencies_y, amplitudes_x, amplitudes_y)
+        return path
 
-
-    def plot(self):
+    def plot(self, x_pol = np.polynomial.Polynomial((0,1)), y_pol = np.polynomial.Polynomial((0,1))):
         fig, ax = plt.subplots()
-        ax.plot(self.x_pol(self.x_frequencies), self.y_pol(self.y_frequencies))
+        ax.plot(x_pol(self.x_frequencies), y_pol(self.y_frequencies))
         plt.show()
 
-    def ani_plot(self, precision: int = 100):
+    def ani_plot(self, x_pol = np.polynomial.Polynomial((0,1)), y_pol = np.polynomial.Polynomial((0,1)), precision: int = 100):
         fig, ax = plt.subplots()
-        x = self.x_pol(self.x_frequencies)
-        y = self.y_pol(self.y_frequencies)
+        x = x_pol(self.x_frequencies)
+        y = y_pol(self.y_frequencies)
         line, = ax.plot([], [], linestyle='-', marker='o')
         j0: int = 0
         t0 = time.time()
@@ -135,19 +150,87 @@ class Path:
         plt.show()
 
 
+#TODO: Create simple class(es) to control frequencies and power of a mogdevice through time (using Path class)
+
+class MovePoint:
+    """
+    Interfacing with mogRF to move the points following the ``Path``
+
+    Parameters
+    ----------
+    path : ``path``
+        The path to follow, containing all necessary information to program the mogdevice. The smaller the timesteps the more precise.
+
+    mog_port : ``int``, optional
+        The USB port of the mogdevice.
+        default = 7
+
+    cns : ``rich.console.Console``, optional
+        The console on which to print results.
+        default = Console()
+    """
+
+    def __init__(self, path: Path, mog_port: int = 7, cns = Console()):
+
+        assert path.time_ms.shape == path.x_frequencies.shape
+        assert path.x_frequencies.shape == path.y_frequencies.shape
+        assert path.y_frequencies.shape == path.y_amplitudes.shape
+        assert path.x_frequencies.shape == path.x_amplitudes.shape
+
+        self.mogdevice = MOGDevice("COM", mog_port)
+        self.path = path
+        self.cns = cns
+
+    def _mogdevice_zero(self):
+        
+        self.mogdevice.cmd('FREQ,1,80')
+        self.mogdevice.cmd('FREQ,2,80')
+        self.mogdevice.cmd('POW,1,30')
+        self.mogdevice.cmd('POW,2,30')
+        self.cns.print(f'Mog device status after zero: {self.mogdevice.ask('STATUS'):>8}')
 
 
+    def run(self, repeat=True):
+        """
+        Launch the loop for moving the point following the ``path``, without camera.
+        
+        Parameters
+        ----------
+        repeat : ``bool``, optional
+            Whether to run the animation only once or to repeat it until stopped by user.
+            default = True
+            
+        """
 
-#TODO: Create simple class(es) to control frequencies and power of a mogdevice through time.
 
-if __name__ == "__main__":
+        with self.cns.status('MovePoint running') :
+                
+            print(f"MogDevice Status: {self.mogdevice.ask("STATUS"):>8}")
+            self._mogdevice_zero()
 
-    myPath = Path(
-        1000*np.array([1, 2, 3, 4, 5, 6, 7, 8]),
-        np.array([70, 90, 90, 70, 70, 80, 70, 70]),
-        np.array([70, 70, 90, 90, 70, 80, 90, 70]),
-        np.array([30, 30, 30, 30, 30, 30, 30, 30]),
-        np.array([30, 30, 30, 30, 30, 30, 30, 30])
-    )
+            i = 0
+            while True:
 
-    myPath.ani_plot()
+                if i>=len(self.path.time_ms):
+                    if repeat:
+                        i = 0
+                    else:
+                        break
+                
+                if i == 0:
+                    time.sleep(self.path.time_ms[i]/1000)
+                else:
+                    time.sleep((self.path.time_ms[i] - self.path.time_ms[i-1])/1000)
+
+                self.mogdevice.cmd(f'FREQ, 1, {self.path.x_frequencies[i]}')
+                self.mogdevice.cmd(f'FREQ, 2, {self.path.y_frequencies[i]}')
+                self.mogdevice.cmd(f'POW, 1, {self.path.x_amplitudes[i]}')
+                self.mogdevice.cmd(f'POW, 2, {self.path.y_amplitudes[i]}')
+
+                i+=1
+
+            self._mogdevice_zero()
+            self.mogdevice.close()
+            self.cns.print('Animation over')
+
+                

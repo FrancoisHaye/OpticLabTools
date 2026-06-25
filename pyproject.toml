@@ -39,3 +39,4 @@ license-files = ["LICENSE"]
 imaging = "ThorlabsGaussianTools.directImage:main"
 gaussian = "ThorlabsGaussianTools.gaussianFit:main"
 AOMcal = "ThorlabsGaussianTools.aomCalibration:main"
+calibrate = "MogrfTools.launch_calibration:main"
