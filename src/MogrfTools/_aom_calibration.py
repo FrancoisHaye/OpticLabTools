@@ -650,7 +650,7 @@ def do_calibration(n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, windo
 
     return polX, polY, compX, compY, alpha, beta
 
-def do_calibration_from_exp(path: str, n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, window = WINDOW):
+def do_calibration_from_exp(path: str, n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, window = WINDOW, plot=False):
     """
     Computes the necessary parameters from a calibration experiment already existing.
     
@@ -712,9 +712,9 @@ def do_calibration_from_exp(path: str, n = N, freq = FREQ, amplitudes = AMPLITUD
     polX, polY = get_position_functions()
     alpha, beta, (regX, regY) = get_angles()
     (compX, compY), (interpX, interpY), (interp_amp_x, interp_amp_y)  = get_intensities_functions(lam, window)
-    plot_frequency(interpX, interpY, regX, regY, polX, polY)
-    plot_noise()
-    plot_test_comp(freq, window, lam)
+    if plot: plot_frequency(interpX, interpY, regX, regY, polX, polY)
+    if plot: plot_noise()
+    if plot: plot_test_comp(freq, window, lam)
 
     os.chdir('..')
     cns.print(f"Currently in directory {os.getcwd()}\n")
