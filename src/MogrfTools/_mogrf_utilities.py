@@ -184,8 +184,8 @@ class Line(Path):
 
     def __init__(self,x_amplitudes, y_amplitudes,theta_deg: float = 45, length_MHz: float = 10., speed_MHz_ms: float = 0.01, dt_ms = 50, backwards: bool = False):
 
-
         N = int(length_MHz / (speed_MHz_ms * dt_ms))
+        assert N <= 1000
         assert N == len(x_amplitudes)
         time_ms = np.linspace(0, dt_ms*N, N)
         freq0 = np.linspace(-length_MHz/2, length_MHz/2, N)
@@ -243,6 +243,7 @@ class Line(Path):
         """
 
         N = int(length_um / (speed_um_ms * dt_ms))
+        assert N <= 1000
         r_pos = np.linspace(-length_um/2, length_um/2, N)
         x_pos = r_pos * np.cos(-np.radians(theta_deg))
         y_pos = r_pos * np.sin(-np.radians(theta_deg))
@@ -287,7 +288,12 @@ class Circle(Path):
 
     def __init__(self, x_amplitudes, y_amplitudes, R_MHz: float = 20, x0_MHz: float = 0, y0_MHz: float = 0, speed_MHz_ms: float = 0.01, dt_ms: float = 50):
         
-        N = int((2*np.pi*R_MHz) / (speed_MHz_ms * dt_ms))
+        N = abs(int((2*np.pi*R_MHz) / (speed_MHz_ms * dt_ms)))
+        assert N <= 1000
+        if speed_MHz_ms >= 0:
+            theta = np.linspace(0, 2*np.pi, N)
+        else:
+            theta = np.linspace(0, -2*np.pi, N)
         time_ms = np.linspace(0, N*dt_ms, N)
         theta = np.linspace(0, 2*np.pi, N)
 
@@ -333,8 +339,12 @@ class Circle(Path):
         
         """
 
-        N = int((2 * np.pi * R_um) / (speed_um_ms * dt_ms))
-        theta = np.linspace(0, 2*np.pi, N)
+        N = abs(int((2 * np.pi * R_um) / (speed_um_ms * dt_ms)))
+        assert N <= 1000
+        if speed_um_ms >= 0:
+            theta = np.linspace(0, 2*np.pi, N)
+        else:
+            theta = np.linspace(0, -2*np.pi, N)
         x_pos = x0_um + R_um * np.cos(theta)
         y_pos = y0_um + R_um * np.sin(theta)
         time_ms = np.linspace(0, dt_ms*N, N)
