@@ -7,8 +7,9 @@ from matplotlib.animation import FuncAnimation
 from ThorlabsGaussianTools.utils.mogdevice import MOGDevice
 from rich.console import Console
 
-#TODO: Create a dataclass representing the path we want the point to follow
-# Tested: it works !!!
+# Constants
+N = 8190    # Maximum number of entries for Simple Table Mode
+DT = 1e-6   # Minimum duration of entries for Simple Table Mode
 
 @dataclass
 class Path:
@@ -149,7 +150,6 @@ class Path:
 
         ani = FuncAnimation(fig, update, frames = frames, init_func=init, blit=True, repeat=False, interval=interval)
         plt.show()
-
 
 class Line(Path):
     """
