@@ -1,5 +1,0 @@
-[console_scripts]
-AOMcal = ThorlabsGaussianTools.aomCalibration:main
-calibrate = MogrfTools.launch_calibration:main
-gaussian = ThorlabsGaussianTools.gaussianFit:main
-imaging = ThorlabsGaussianTools.directImage:main

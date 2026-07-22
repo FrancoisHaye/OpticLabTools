@@ -4,7 +4,6 @@
 
 # classical imports
 from dataclasses import dataclass
-from functools import partial
 import numpy as np
 from scipy.ndimage import gaussian_filter
 import matplotlib as mpl
@@ -760,7 +759,7 @@ class RFanim(GaussianFitImaging):
             return self.im, self.contour, self.textbox,
 
     def run(self):
-        """Launches the animation."""
+        """Launches the animation. Stop by closing the matplotlib window."""
 
         self.max_frames = len(self.freqRF1)
 

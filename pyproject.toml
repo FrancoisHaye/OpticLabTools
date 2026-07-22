@@ -14,8 +14,8 @@ version = "0.0.1"
 authors = [
 	{ name = "Francois HAYE", email = "francois.haye@espci.fr" },
 ]
-description = "Various lab utilities for Thorlabs cameras and gaussian beams."
-keywords = ["thorlabs", "imaging", "camera", "gaussian", "beam", "optics"]
+description = "Various lab utilities for gaussian beams and optical tweezers."
+keywords = ["thorlabs", "imaging", "camera", "gaussian", "beam", "optics", "tweezers", "moglabs", "mogrf"]
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [

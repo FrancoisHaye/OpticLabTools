@@ -11,18 +11,12 @@ Package designed to use a Thorlabs Camera for the analysis of gaussian beams. it
 Parameter classes
 =================
 
-.. autosummary::
-    :toctree: generated/
-
     CameraParameters - Various parameters needed for camera image acquisition
     VisualizationParameters - Various parameters for matplotlib visualization
     VisualizationGaussianParameters - Sub-class of VisualizationParameters that enriches it for gaussian fitting.
 
 Imaging classes
 ===============
-
-.. autosummary::
-    :toctree: generated/
 
     RealTimeImaging - abstract class giving the structure of imaging classes and general methods
     SimpleImaging - subclass of RealTimeImaging for imaging without any calculations

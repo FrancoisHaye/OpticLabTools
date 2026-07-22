@@ -3,7 +3,7 @@
 aom_calibration
 ---------------
 
-Gives the function ``do_calibration`` to run calibration in the current directory.
+Gives the functions ``do_calibration`` to run calibrations in the current directory.
 
 """
 #%% Preamble
@@ -192,7 +192,7 @@ def get_angles():
     ])
 
     alpha = np.arccos(np.vdot(vX, vY) / (np.linalg.norm(vX) * np.linalg.norm(vY)))
-    beta = np.arccos(np.vdot(vX, eX) / np.linalg.norm(vX))
+    beta = -np.arccos(np.vdot(vX, eX) / np.linalg.norm(vX))
 
     return float(alpha), float(beta), (regX, regY)
 
@@ -253,8 +253,6 @@ def frequency_calibration(n, freq):
 
     myAnimY.mogdevice.close()
 
-
-
 def quick_frequency_calibration(n, freq, g=23.):
 
     intensities_x = np.zeros_like(freq)
@@ -289,7 +287,7 @@ def quick_frequency_calibration(n, freq, g=23.):
                 for i,f in enumerate(freq):
 
                     aomDevice.cmd(f'FREQ,1,{f} MHz')
-                    time.sleep(0.2)
+                    time.sleep(1)
                 
                     imageCam = cam.get_pending_frame_or_null()
                     if imageCam is not None:
@@ -310,7 +308,7 @@ def quick_frequency_calibration(n, freq, g=23.):
                 for i,f in enumerate(freq):
 
                     aomDevice.cmd(f'FREQ,2,{f} MHz')
-                    time.sleep(0.2)
+                    time.sleep(1)
                 
                     imageCam = cam.get_pending_frame_or_null()
                     if imageCam is not None:
@@ -367,7 +365,7 @@ def amplitude_calibration(amplitudes):
                 for i,amp in enumerate(amplitudes):
 
                     aomDevice.cmd(f'POW,1,{amp} dBm')
-                    time.sleep(0.2)
+                    time.sleep(1)
                 
                     imageCam = cam.get_pending_frame_or_null()
                     if imageCam is not None:
@@ -385,7 +383,7 @@ def amplitude_calibration(amplitudes):
                 for i,amp in enumerate(amplitudes):
 
                     aomDevice.cmd(f'POW,2,{amp} dBm')
-                    time.sleep(0.2)
+                    time.sleep(1)
                 
                     imageCam = cam.get_pending_frame_or_null()
                     if imageCam is not None:
@@ -405,7 +403,7 @@ def amplitude_calibration(amplitudes):
                 aomDevice.close()
                 cam.disarm()
 
-def noise_calibration(duration_s: float = 30, step: float = 1):
+def noise_calibration(duration_s: float = 30, step: float = 0.5):
 
     t0 = time.time()
     t = []
@@ -478,7 +476,7 @@ def test_calibration(freq, compensate_x: function, compensate_y: function):
 
                     aomDevice.cmd(f'POW,1,{amplitudes_x[i]} dBm')
                     aomDevice.cmd(f'FREQ,1,{freq[i]} MHz')
-                    time.sleep(0.2)
+                    time.sleep(1)
                 
                     imageCam = cam.get_pending_frame_or_null()
                     if imageCam is not None:
@@ -497,7 +495,7 @@ def test_calibration(freq, compensate_x: function, compensate_y: function):
 
                     aomDevice.cmd(f'POW,2,{amplitudes_y[i]} dBm')
                     aomDevice.cmd(f'FREQ,2,{freq[i]} MHz')
-                    time.sleep(0.2)
+                    time.sleep(1)
                 
                     imageCam = cam.get_pending_frame_or_null()
                     if imageCam is not None:
@@ -699,17 +697,26 @@ def plot_noise():
     fig, ax = plt.subplots()
     with np.load('./noise.npz') as data:
         ax.plot(data['time'], data['intensity']/data['intensity'].mean(), 'b.')
-    ax.set(
-        xlabel = r"$t$ [s]",
-        ylabel = r"$I/I_0$",
-        ylim=(0.8,1.2)
-    )
+        ax.text(
+        .95, .95, f"sigma = {data['intensity'].std()/data['intensity'].mean():.1%}",
+        ha = 'right', va = 'top',
+        transform = ax.transAxes,
+        bbox = dict(boxstyle="round", edgecolor='k', facecolor='white')
+        )
+        ax.hlines(1, -1, data['time'][-1]+1, colors='k')
+        ax.set(
+            xlabel = r"$t$ [s]",
+            ylabel = r"$I/I_0$",
+            ylim=(0.95,1.05),
+            xlim=(-1, data['time'][-1]+1)
+        )
+    
     fig.savefig('./Noise.png', dpi=600)
     plt.show()
 
 #%% Main
 
-def do_calibration(n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, window = WINDOW):
+def do_calibration(n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, window = WINDOW, noise_duration: float = 60, noise_step: float = 0.5):
     """
     Launch all AOM calibration experiment and computes the necessary paramters.
     
@@ -772,9 +779,9 @@ def do_calibration(n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, windo
 
     with cns.status('frequency calibration'): frequency_calibration(n, freq)
     cns.print(':thumbsup: frequency calibration')
-    with cns.print('amplitude calibration'): amplitude_calibration(amplitudes)
+    with cns.status('amplitude calibration'): amplitude_calibration(amplitudes)
     cns.print(':thumbsup: amplitude calibration')
-    with cns.print('noise measurement'): noise_calibration(duration_s=30, step=1)
+    with cns.status('noise measurement'): noise_calibration(duration_s=noise_duration, step=noise_step)
     cns.print(':thumbsup: noise measurement')
     polX, polY = get_position_functions()
     alpha, beta, (regX, regY) = get_angles()
@@ -870,7 +877,84 @@ def do_calibration_from_exp(path: str, n = N, freq = FREQ, amplitudes = AMPLITUD
 
     return polX, polY, compX, compY, alpha, beta
 
-def do_quick_calibration(n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, window = WINDOW, plot=False):
+def do_complete_calibration_from_exp(path: str, n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, window = WINDOW, plot=False):
+    """
+    Computes the necessary parameters from a calibration experiment already existing.
+    
+    Parameters
+    ----------
+    path : ``str``
+        The path of the experiment, giving access to all data stored in the path dir.
+
+    n : ``int``, optional
+        2*n is the number of frequencies and amplitudes used for the calibration
+
+    freq : ``np.ndarray``, optional
+        Frequencies to investigate, in MHz. of dim (2*n,).
+
+    amplitudes : ``np.ndarray``, optional
+        Amplitudes to investigate, in MHz. of dim (2*n,).
+
+    lam : ``float``, optional
+        Lagrange multiplier for the smoothing, a greater lambda means a smoother curve.
+        default = 100
+
+    window : ``list[float, float]``
+        Frequency window where the intensity must remain constant, in MHz.
+        default = [70, 90]
+
+    Returns
+    -------
+    polX : ``np.polynomial.Polynomial``
+        The polynomail giving the x-axis position (brt the AOMs frame) brt the frequency of the x AOM.
+
+    polY : ``np.polynomial.Polynomial``
+        The polynomial giving the y-axis position (brt the AOMs frame ) brt the frequency of the y AOM.
+
+    compX : ``function``
+        The function giving the compensation of intensity loss by change of amplitude, for any frequency. AmpX = compX(freqX).
+
+    compY : ``function``
+        The function giving the compensation of intensity loss by change of amplitude, for any frequency. AmpY = compY(freqY).
+
+    alpha : ``float``
+        The angle between the two AOM directions, in rad.
+
+    beta : ``float``
+        The angle between the camera x-axis and the AOMs x-axis, in rad.
+    
+    """
+
+    cns.print('\n\n')
+    cns.rule("[bold]Calibration of AOMs", align='left')
+
+    cns.print("\nThe following steps must have been executed, if not, an error will occur.\n")
+    cns.print(f"{1:<5d} Calibration of frequencies with gaussian fitting.")
+    cns.print(f"{2:<5d} Calibration of amplitudes.")
+    cns.print(f"{3:<5d} Noise measurement.")
+    cns.print(f"{4:<5d} Testing the quality of the calibration.\n")
+
+    os.chdir(f'./{path}')
+
+    with cns.status('analysis of data') :
+        polX, polY = get_position_functions()
+        alpha, beta, (regX, regY) = get_angles()
+        (compX, compY), (interpX, interpY), (interp_amp_x, interp_amp_y)  = get_intensities_functions(lam, window)
+        if plot: plot_frequency(interpX, interpY, regX, regY, polX, polY)
+        if plot: plot_noise()
+        if plot: plot_test_comp(freq, window, lam)
+
+    cns.print(':thumbsup: data analysed, calibration ready for usage.')
+
+    os.chdir('..')
+
+    cns.print('\n\n')
+    cns.rule("End of calibration", align='left')
+    cns.print('\n\n')
+
+    return polX, polY, compX, compY, alpha, beta
+
+def do_quick_calibration(n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM, window = WINDOW, plot=False, noise_duration: float = 60, noise_step: float = 0.5):
 
     cns.print('\n\n')
     cns.rule("[bold]Calibration of AOMs", align='left')
@@ -893,7 +977,7 @@ def do_quick_calibration(n = N, freq = FREQ, amplitudes = AMPLITUDES, lam = LAM,
     cns.print(":thumbsup: frequency calibration")
     with cns.status('amplitude calibration'): amplitude_calibration(amplitudes)
     cns.print(":thumbsup: amplitude calibration")
-    with cns.status('noise measurement'): noise_calibration(duration_s=30, step=1)
+    with cns.status('noise measurement'): noise_calibration(duration_s=noise_duration, step=noise_step)
     cns.print(":thumbsup: noise measurement")
     polX, polY = get_position_functions()
     alpha, beta, (regX, regY) = get_angles()

@@ -1,3 +1,9 @@
+"""
+
+Usage of GaussianFitImaging class to fit the gaussian in direct.
+
+"""
+
 from ThorlabsGaussianTools import VisualizationGaussianParameters, CameraParameters, GaussianFitImaging
 
 myCamParams = CameraParameters(exposure_time_us=1)

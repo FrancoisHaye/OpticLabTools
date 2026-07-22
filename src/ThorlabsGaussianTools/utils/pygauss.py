@@ -21,15 +21,45 @@ from scipy.optimize import curve_fit
 
 def gaussian2D(xdata: tuple[np.ndarray, np.ndarray], x0: float, y0: float, sigmax: float, sigmay: float, theta: float, amplitude: float, offset: float):
     """
-    Return the value of the gaussian centered on (`x0`,`y0`), of amplitude `A` and standard deviation `sigmax` (resp `sigmay`) in the x (resp y) direction, on point `xdata`=(x,y).
+    2 dimensionnal gaussian distribution.
 
-    The `offset` parameter is because experimentaly the zero is not perfect.
+    Parameters
+    ----------
+    xdata : ``tuple[np.ndarray, np.ndarray]``
+        The positions (x,y) where to calculate the value of the gaussian.
+    
+    x0, y0 : ``float``
+        The position of the center of the gaussian distribution.
+
+    sigmax, sigmay : ``float``
+        The standard deviations of the gaussian in the two main directions which will be pivoted by ``theta``
+    
+    theta : ``float``
+        The angle by which is rotated the distribution, in rad.
+
+    amplitude, offset : ``float``
+        Parameters such that the gaussian gives ``amplitude * exp(...) + offset``.
+
+    Returns
+    -------
+    g : ``np.ndarray``
+        ravelled array of shape ``xdata[0].shape``
+
+    Example
+    -------
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as plt
+    >>> from ThorlabsGaussianTools.utils.pygauss import gaussian2D
+    >>> x, y = np.linspace(0, 100, 100), np.linspace(0, 100, 100)
+    >>> xv, yv = np.meshgrid(x,y)
+    >>> xdata = np.vstack((xv.ravel(), yv.ravel()))
+    >>> z = gaussian2D(xdata, 50, 50, 10, 5, np.radians(20), 10, 0).reshape(xv.shape)
+    >>> plt.imshow(z)
+    >>> plt.show()
 
     """
 
     x, y = xdata
-    x0 = float(x0)
-    y0 = float(y0)
     a = np.cos(theta)**2/(2*sigmax**2)+np.sin(theta)**2/(2*sigmay**2)
     b = -np.sin(theta)*np.cos(theta)/(2*sigmax**2)+np.cos(theta)*np.sin(theta)/(2*sigmay**2)
     c = np.sin(theta)**2/(2*sigmax**2)+np.cos(theta)**2/(2*sigmay**2)
@@ -40,19 +70,38 @@ def gaussian2D(xdata: tuple[np.ndarray, np.ndarray], x0: float, y0: float, sigma
 
 def gaussianFit(Z: np.ndarray, x0_guess: float, y0_guess: float, sigmax_guess: float, sigmay_guess: float, theta_guess: float):
     """
-    # gaussiantFit
-    
-    ## Parameters
-    * `Z`: numpy array of dim 2. The image of the gaussian beam to fit.
-    * `scale`: float. The scale of the picture in µm/pixel. Typically l/n with l the size of the picture and n the number of pixels. Beware to add the magnification in case an imaging system is used!
-    * `sigma_guess`: The guessed waist of the beam in pixels.
-    * `x0_guess`, `y0_guess`: The guessed position of the center of the beam in pixels.
+    Fit of a 2D gaussian on an image.
 
-    ## Returns
-    * `wx`, `wy`: calculated waists
-    * `theta`: calculated angle of the profile
-    * `Zsim`: calculated gaussian beam profile
+    Parameters
+    ----------
+    Z : ``np.ndarray``
+        The array to fit (the image of the 2D gaussian).
+    
+    x0_guess, y0_guess : ``float``
+        The guessed position of the center of the 2D gaussian (in px).
+    
+    sigmax_guess, sigmay_guess : ``float``
+        The guessed standard deviations of the 2D gaussian (in px).
+
+    theta_guess : ``float``
+        The guessed angle between the x-axis of the image and the principal axis of the 2D gaussian (in px).
+
+    Returns
+    -------
+    popt : ``tuple``
+        The optimal parameters found by scipy.optimize.curve_fit in the following order: (x0, y0, sigmax, sigmay, theta).
+
+    sim_data : ``tuple``
+        The data used to plot the simulated gaussian 2D (xv, yv, Zsim), with xv, yv the meshgrid of the data points.
+
+    Raises
+    ------
+    AssertionError
+        if the array dimension is not 2
+
     """
+
+    assert len(Z.shape) == 2
 
     ### Calculation with curve_fit
     ny, nx = Z.shape
@@ -65,8 +114,8 @@ def gaussianFit(Z: np.ndarray, x0_guess: float, y0_guess: float, sigmax_guess: f
         xdata = xdata,
         ydata = Z.ravel(),
         p0 = guess_params,
-        bounds = ([0,0,0,0,0,0,0],[nx, ny, nx, ny, np.pi/4, 2*Z.max(), 2*Z.min()])
-        )
+        bounds = ([0,0,0,0,-np.pi/4,0,0],[nx, ny, nx, ny, np.pi/4, 2*Z.max(), 2*Z.min()])
+    )
 
     ### Visualizing the gaussian and getting the waist
     Zsim = gaussian2D(xdata,*popt).reshape(xv.shape)
@@ -86,8 +135,11 @@ def gaussianCompute(Z: np.ndarray):
     
     Returns
     -------
-    params : ``tuple[float, float, float, float]``
+    params : ``tuple``
         The parameters of the gaussian in the following order: x0, y0, sigmax, sigmay, theta
+
+    sim_data : ``tuple``
+        The data used to plot the simulated gaussian 2D (xv, yv, Zsim), with xv, yv the meshgrid of the data points.
 
     Raises
     ------

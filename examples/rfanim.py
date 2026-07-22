@@ -1,3 +1,9 @@
+"""
+
+Usage of RFanim class to move the point by changing the AOMs freq. (obsolete since MogrfTools exists)
+
+"""
+
 from ThorlabsGaussianTools import CameraParameters, VisualizationGaussianParameters, RFanim
 import numpy as np
 

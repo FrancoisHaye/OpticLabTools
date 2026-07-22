@@ -1,3 +1,9 @@
+"""
+
+Usage of SimpleImaging class to view the gaussian beam in direct.
+
+"""
+
 from ThorlabsGaussianTools import VisualizationParameters, CameraParameters, SimpleImaging
 
 myCamParams = CameraParameters(exposure_time_us=1)
