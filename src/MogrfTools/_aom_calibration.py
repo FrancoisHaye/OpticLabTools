@@ -343,7 +343,7 @@ def amplitude_calibration(amplitudes):
 
     try:
         aomDevice = MOGDevice("COM", port=7)
-    except serial.SerialException, RuntimeError:
+    except (serial.SerialException, RuntimeError):
         print("AOM device already connected.")
         
     
@@ -454,7 +454,7 @@ def test_calibration(freq, compensate_x: function, compensate_y: function):
 
     try:
         aomDevice = MOGDevice("COM", port=7)
-    except serial.SerialException, RuntimeError:
+    except (serial.SerialException, RuntimeError):
         print("AOM device already connected.")
 
     init_mog_device(aomDevice)
