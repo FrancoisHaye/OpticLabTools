@@ -1,0 +1,4 @@
+[console_scripts]
+imaging-calibrate = MogrfTools.launch_calibration:main
+imaging-gaussian = ThorlabsGaussianTools.gaussianFit:main
+imaging-simple = ThorlabsGaussianTools.directImage:main

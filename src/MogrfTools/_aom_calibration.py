@@ -3,6 +3,8 @@
 aom_calibration
 ---------------
 
+.. currentmodule:: MogrfTools
+
 Gives the functions ``do_calibration`` to run calibrations in the current directory.
 
 """

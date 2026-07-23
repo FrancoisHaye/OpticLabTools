@@ -2,17 +2,18 @@
 ``utils.pygauss``
 =================
 
-
 Python module to compute gaussian beam fits.
 
 Available functions
----------
-gaussian2D
-    Two dimensional gaussian distribution.
-gaussianFit
-    Two dimensional gaussian fitting by least square method.
-gaussianCompute
-    Computes the parameters of a 2D gaussian by definition of average and standard deviation of a probability distribution.
+-------------------
+
+.. autosummary::
+    :toctree: generated
+    :recursive:
+
+    gaussian2D - Two dimensional gaussian distribution.
+    gaussianFit - Two dimensional gaussian fitting by least square method.
+    gaussianCompute - Computes the parameters of a 2D gaussian by definition of average and standard deviation of a probability distribution.
 
 """
 
@@ -22,6 +23,23 @@ from scipy.optimize import curve_fit
 def gaussian2D(xdata: tuple[np.ndarray, np.ndarray], x0: float, y0: float, sigmax: float, sigmay: float, theta: float, amplitude: float, offset: float):
     """
     2 dimensionnal gaussian distribution.
+
+    The following formula is used:
+
+    .. math::
+
+        f(x,y) = A \\exp \\left[ -\\left( a\\left(x - x_0\\right)^2 + 2 b \\left(x-x_0\\right)\\left( y-y_0 \\right) + c\\left(y-y_0\\right)^2 \\right) \\right] + B
+
+    :math:`A` is the amplitude and :math:`B` the offset. The three parameters :math:`a, b, c` are defined as follows:
+
+    .. math::
+
+        a &= \\frac{\\cos^2\\theta}{2\\sigma_x^2} + \\frac{\\sin^2\\theta}{2\\sigma_y^2} \\\\
+        b &= -\\frac{\\sin\\theta \\cos\\theta}{2\\sigma_x^2} + \\frac{\\sin\\theta \\cos\\theta}{2\\sigma_y^2} \\\\
+        c &= \\frac{\\sin^2\\theta}{2\\sigma_x^2} + \\frac{\\cos^2\\theta}{2\\sigma_y^2}
+
+    Hence the parameters :math:`\\sigma_x, \\sigma_y` for the shape of the gaussian and :math:`\\theta` for its rotation with respect to the reference frame.
+
 
     Parameters
     ----------

@@ -1,6 +1,22 @@
 # coding=utf-8
 """
-tl_camera.py
+``utils.tl_camera``
+===================
+
+Thorlabs API to use scientific cameras in python. See https://www.thorlabs.com/software-pages/thorcam for more information.
+
+Main classes
+------------
+
+.. autosummary::
+    :toctree: generated
+    :recursive:
+    :template: custom_class.rst
+
+    TLCamera - Class representing a Thorlabs scientific camera
+    TLCameraSDK - Class representing a SDK (Software Development Kit) allowing to open new TLCamera instances
+
+
 """
 
 from ctypes import cdll, create_string_buffer, POINTER, CFUNCTYPE, c_int, c_ushort, c_void_p, c_char_p, c_uint, \

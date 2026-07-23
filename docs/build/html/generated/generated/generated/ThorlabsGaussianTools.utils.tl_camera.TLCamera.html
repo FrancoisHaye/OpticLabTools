@@ -1,0 +1,1789 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ThorlabsGaussianTools.utils.tl_camera.TLCamera &#8212; OpticLabTools  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/generated/generated/ThorlabsGaussianTools.utils.tl_camera.TLCamera';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ThorlabsGaussianTools.utils.tl_camera.TLCameraSDK" href="ThorlabsGaussianTools.utils.tl_camera.TLCameraSDK.html" />
+    <link rel="prev" title="ThorlabsGaussianTools.utils.tl_camera" href="../ThorlabsGaussianTools.utils.tl_camera.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">OpticLabTools  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../CLI_tools.html">
+    CLI tools
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../ThorlabsGaussianTools.html">
+    ThorlabsGaussianTools
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../MogrfTools.html">
+    MogrfTools
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../CLI_tools.html">
+    CLI tools
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../ThorlabsGaussianTools.html">
+    ThorlabsGaussianTools
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../MogrfTools.html">
+    MogrfTools
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../ThorlabsGaussianTools.utils.html">ThorlabsGaussianTools.utils</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ThorlabsGaussianTools.utils.configure_path.html">ThorlabsGaussianTools.utils.configure_path</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ThorlabsGaussianTools.utils.tl_camera.html">ThorlabsGaussianTools.utils.tl_camera</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">ThorlabsGaussianTools.utils.tl_camera.TLCamera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ThorlabsGaussianTools.utils.tl_camera.TLCameraSDK.html">ThorlabsGaussianTools.utils.tl_camera.TLCameraSDK</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../ThorlabsGaussianTools.utils.pygauss.html">ThorlabsGaussianTools.utils.pygauss</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="ThorlabsGaussianTools.utils.pygauss.gaussian2D.html">ThorlabsGaussianTools.utils.pygauss.gaussian2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ThorlabsGaussianTools.utils.pygauss.gaussianFit.html">ThorlabsGaussianTools.utils.pygauss.gaussianFit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ThorlabsGaussianTools.utils.pygauss.gaussianCompute.html">ThorlabsGaussianTools.utils.pygauss.gaussianCompute</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../ThorlabsGaussianTools.utils.mogdevice.html">ThorlabsGaussianTools.utils.mogdevice</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../ThorlabsGaussianTools.CameraParameters.html">ThorlabsGaussianTools.CameraParameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ThorlabsGaussianTools.VisualizationParameters.html">ThorlabsGaussianTools.VisualizationParameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ThorlabsGaussianTools.VisualizationGaussianParameters.html">ThorlabsGaussianTools.VisualizationGaussianParameters</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../ThorlabsGaussianTools.RealTimeImaging.html">ThorlabsGaussianTools.RealTimeImaging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ThorlabsGaussianTools.SimpleImaging.html">ThorlabsGaussianTools.SimpleImaging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ThorlabsGaussianTools.GaussianFitImaging.html">ThorlabsGaussianTools.GaussianFitImaging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ThorlabsGaussianTools.RFanim.html">ThorlabsGaussianTools.RFanim</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../ThorlabsGaussianTools.html" class="nav-link"><code class="docutils literal notranslate"><span class="pre">ThorlabsGaussianTools</span></code></a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../ThorlabsGaussianTools.utils.html" class="nav-link">ThorlabsGaussianTools.utils</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ThorlabsGaussianTools.utils.tl_camera.html" class="nav-link">ThorlabsGaussianTools.utils.tl_camera</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">ThorlabsGaussianTools.utils.tl_camera.TLCamera</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="thorlabsgaussiantools-utils-tl-camera-tlcamera">
+<h1>ThorlabsGaussianTools.utils.tl_camera.TLCamera<a class="headerlink" href="#thorlabsgaussiantools-utils-tl-camera-tlcamera" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ThorlabsGaussianTools.utils.tl_camera.</span></span><span class="sig-name descname"><span class="pre">TLCamera</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Used to interface with a Thorlabs camera. These objects can adjust camera settings and retrieve images.
+When finished with a camera, call its <code class="xref py py-meth docutils literal notranslate"><span class="pre">dispose</span></code> method to clean
+up any opened resources. These objects can be managed using <em>with</em> statements for automatic resource clean up.
+These objects can only be created by calls
+to <code class="xref py py-meth docutils literal notranslate"><span class="pre">TLCameraSDK.open_camera</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sdk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.__init__" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(key, sdk, camera)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.arm" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.arm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arm</span></code></a>(frames_to_buffer)</p></td>
+<td><p>Before issuing software or hardware triggers to get images from a camera, prepare it for imaging by calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_decibels_to_gain" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_decibels_to_gain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_decibels_to_gain</span></code></a>(gain_db)</p></td>
+<td><p>Use this method to convert the gain (in decibels) from the <code class="xref py py-meth docutils literal notranslate"><span class="pre">convert_gain_to_decibels</span></code> method back into a gain index.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_gain_to_decibels" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_gain_to_decibels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_gain_to_decibels</span></code></a>(gain)</p></td>
+<td><p>Use this method to convert the gain from the <code class="xref py py-attr docutils literal notranslate"><span class="pre">gain</span></code> property into units of Decibels (dB).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.disarm" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.disarm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disarm</span></code></a>()</p></td>
+<td><p>When finished issuing software or hardware triggers, call <code class="xref py py-meth docutils literal notranslate"><span class="pre">disarm()</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.dispose" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.dispose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dispose</span></code></a>()</p></td>
+<td><p>Cleans up the TLCamera instance - make sure to call this when you are done with the camera.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_color_correction_matrix" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_color_correction_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_color_correction_matrix</span></code></a>()</p></td>
+<td><p>Each scientific color camera includes a three-by-three matrix that can be used to achieve consistent color for different camera modelsGet the default color correction matrix for this camera.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_default_white_balance_matrix" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_default_white_balance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_default_white_balance_matrix</span></code></a>()</p></td>
+<td><p>Get the default white balance matrix for this camera.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_data_rate_supported" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_data_rate_supported"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_is_data_rate_supported</span></code></a>(data_rate)</p></td>
+<td><p>Scientific-CCD cameras and compact-scientific cameras handle sensor- level data-readout speed differently.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_operation_mode_supported" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_operation_mode_supported"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_is_operation_mode_supported</span></code></a>(operation_mode)</p></td>
+<td><p>This method can be used to determine if a camera has the ability to perform hardware triggering.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_taps_supported" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_taps_supported"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_is_taps_supported</span></code></a>(tap)</p></td>
+<td><p>All CCD cameras support a single tap.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_measured_frame_rate_fps" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_measured_frame_rate_fps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_measured_frame_rate_fps</span></code></a>()</p></td>
+<td><p>Gets the current rate of frames that are delivered to the host computer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_pending_frame_or_null" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_pending_frame_or_null"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_pending_frame_or_null</span></code></a>()</p></td>
+<td><p>Polls the camera for an image.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.issue_software_trigger" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.issue_software_trigger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">issue_software_trigger</span></code></a>()</p></td>
+<td><p>If the <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> is set to SOFTWARE_TRIGGERED and <code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code> is called, then calling this method will generate a trigger through the camera SDK rather than through the hardware trigger input.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binx</span></code></a></p></td>
+<td><p>The current horizontal binning value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">binx_range</span></code></a></p></td>
+<td><p>The binning ratio in the X direction can be determined with this property.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny"><code class="xref py py-obj docutils literal notranslate"><span class="pre">biny</span></code></a></p></td>
+<td><p>The current vertical binning value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">biny_range</span></code></a></p></td>
+<td><p>The binning ratio in the Y direction can be determined with this property.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.bit_depth" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.bit_depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bit_depth</span></code></a></p></td>
+<td><p>The number of bits to which a pixel value is digitized on a camera.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">black_level</span></code></a></p></td>
+<td><p>Black level adds an offset to pixel values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">black_level_range</span></code></a></p></td>
+<td><p>Black level adds an offset to pixel values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_color_correction_matrix_output_color_space" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_color_correction_matrix_output_color_space"><code class="xref py py-obj docutils literal notranslate"><span class="pre">camera_color_correction_matrix_output_color_space</span></code></a></p></td>
+<td><p>This describes the camera color correction matrix output color space.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_sensor_type" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_sensor_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">camera_sensor_type</span></code></a></p></td>
+<td><p>The camera sensor type.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.color_filter_array_phase" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.color_filter_array_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">color_filter_array_phase</span></code></a></p></td>
+<td><p>This describes the <code class="xref py py-class docutils literal notranslate"><span class="pre">color</span> <span class="pre">filter</span> <span class="pre">array</span> <span class="pre">phase</span></code> for the camera.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.communication_interface" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.communication_interface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">communication_interface</span></code></a></p></td>
+<td><p>This property describes the computer interface type, such as USB, GigE, or CameraLink.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.data_rate" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.data_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_rate</span></code></a></p></td>
+<td><p>This property sets or gets the sensor-level data rate.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.eep_status" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.eep_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eep_status</span></code></a></p></td>
+<td><p>Equal Exposure Pulse (EEP) mode is an LVTTL-level signal that is active during the time when all rows have been reset during rolling reset, and the end of the exposure time (and the beginning of rolling readout).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_range_us" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_range_us"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exposure_time_range_us</span></code></a></p></td>
+<td><p>Range of possible exposure values in microseconds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_us" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_us"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exposure_time_us</span></code></a></p></td>
+<td><p>The time, in microseconds (us), that charge is integrated on the image sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.firmware_version" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.firmware_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">firmware_version</span></code></a></p></td>
+<td><p>String containing the version information for all firmware components.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frame_rate_control_value</span></code></a></p></td>
+<td><p>The frame rate control adjusts the frame rate of the camera independent of exposure time, within certain constraints.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frame_rate_control_value_range</span></code></a></p></td>
+<td><p>Frame rate control will set the frames per second of the camera.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_time_us" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_time_us"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frame_time_us</span></code></a></p></td>
+<td><p>The time, in microseconds (us), required for a frame to be exposed and read out from the sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames_per_trigger_range</span></code></a></p></td>
+<td><p>The number of frames generated per software or hardware trigger can be unlimited or finite.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_zero_for_unlimited" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_zero_for_unlimited"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames_per_trigger_zero_for_unlimited</span></code></a></p></td>
+<td><p>The number of frames generated per software or hardware trigger can be unlimited or finite.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gain</span></code></a></p></td>
+<td><p>Gain refers to the scaling of pixel values up or down for a given amount of light.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gain_range</span></code></a></p></td>
+<td><p>The range of possible gain values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hot_pixel_correction_threshold</span></code></a></p></td>
+<td><p>Due to variability in manufacturing, some pixels have inherently higher dark current which manifests as abnormally bright pixels in images, typically visible with longer exposures.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hot_pixel_correction_threshold_range</span></code></a></p></td>
+<td><p>The range of acceptable hot pixel correction threshold values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_pixels" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_pixels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_height_pixels</span></code></a></p></td>
+<td><p>This property provides the image height in pixels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_range_pixels" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_range_pixels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_height_range_pixels</span></code></a></p></td>
+<td><p>The range of possible image height values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_poll_timeout_ms" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_poll_timeout_ms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_poll_timeout_ms</span></code></a></p></td>
+<td><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_pending_frame_or_null()</span></code> will block up to this many milliseconds to get an image.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_pixels" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_pixels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_width_pixels</span></code></a></p></td>
+<td><p>This property provides the image width in pixels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_range_pixels" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_range_pixels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_width_range_pixels</span></code></a></p></td>
+<td><p>The range of possible image width values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_armed" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_armed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_armed</span></code></a></p></td>
+<td><p>Prior to issuing software or hardware triggers to get images from a camera, call <code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code> to prepare it for imaging.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_enabled" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_enabled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_cooling_enabled</span></code></a></p></td>
+<td><p>All Thorlabs scientific cameras are designed to efficiently dissipate heat.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_supported" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_supported"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_cooling_supported</span></code></a></p></td>
+<td><p>All Thorlabs scientific cameras are designed to efficiently dissipate heat.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_enabled" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_enabled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_eep_enabled</span></code></a></p></td>
+<td><p>Equal Exposure Pulse (EEP) mode is an LVTTL-level signal that is active between the time when all rows have been reset during rolling reset, and the end of the exposure time (and the beginning of rolling readout).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_supported" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_supported"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_eep_supported</span></code></a></p></td>
+<td><p>Equal Exposure Pulse (EEP) mode is an LVTTL-level signal that is active between the time when all rows have been reset during rolling reset, and the end of the exposure time (and the beginning of rolling readout).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_frame_rate_control_enabled" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_frame_rate_control_enabled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_frame_rate_control_enabled</span></code></a></p></td>
+<td><p>While frame rate control is enabled, the frames per second will be controlled by <code class="xref py py-attr docutils literal notranslate"><span class="pre">frame_rate_control_value</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_hot_pixel_correction_enabled" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_hot_pixel_correction_enabled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_hot_pixel_correction_enabled</span></code></a></p></td>
+<td><p>Due to variability in manufacturing, some pixels have inherently higher dark current which manifests as abnormally bright pixels in images, typically visible with longer exposures.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_on" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_on"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_led_on</span></code></a></p></td>
+<td><p>Some scientific cameras include an LED indicator light on the back panel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_supported" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_supported"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_led_supported</span></code></a></p></td>
+<td><p>Some scientific cameras include an LED indicator light on the back panel.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_nir_boost_supported" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_nir_boost_supported"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_nir_boost_supported</span></code></a></p></td>
+<td><p>Some scientific-CCD camera models offer an enhanced near-infrared imaging mode for wavelengths in the 500 to 1000nm range.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.model" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a></p></td>
+<td><p>Gets the camera model number such as 1501M or 8051C.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.name" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>Cameras can always be distinguished from each other by their serial numbers and/or model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.name_string_length_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.name_string_length_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name_string_length_range</span></code></a></p></td>
+<td><p>The minimum and maximum string lengths allowed for setting the camera's name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.operation_mode" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.operation_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">operation_mode</span></code></a></p></td>
+<td><p>Thorlabs scientific cameras can be software- or hardware-triggered.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.polar_phase" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.polar_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">polar_phase</span></code></a></p></td>
+<td><p>This describes how the polarization filter is aligned over the camera sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roi</span></code></a></p></td>
+<td><p>By default, the region of interest (ROI) is the same as the sensor resolution.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roi_range</span></code></a></p></td>
+<td><p>The rules for rectangular regions of interest (ROIs) vary by camera model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_height_pixels" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_height_pixels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensor_height_pixels</span></code></a></p></td>
+<td><p>This property provides the physical height of the camera sensor in pixels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_height_um" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_height_um"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensor_pixel_height_um</span></code></a></p></td>
+<td><p>This property provides the physical height of a single light-sensitive photo site on the sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_size_bytes" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_size_bytes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensor_pixel_size_bytes</span></code></a></p></td>
+<td><p>The pixel size of the camera's sensor in bytes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_width_um" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_width_um"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensor_pixel_width_um</span></code></a></p></td>
+<td><p>This property provides the physical width of a single light-sensitive photo site on the sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_readout_time_ns" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_readout_time_ns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensor_readout_time_ns</span></code></a></p></td>
+<td><p>The time, in nanoseconds (ns), that readout data from image sensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_width_pixels" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_width_pixels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensor_width_pixels</span></code></a></p></td>
+<td><p>This property provides the physical width of the camera sensor in pixels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serial_number</span></code></a></p></td>
+<td><p>This property gets the unique identifier for a camera.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number_string_length_range" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number_string_length_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serial_number_string_length_range</span></code></a></p></td>
+<td><p>The minimum and maximum number of characters allowed in the serial number string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.trigger_polarity" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.trigger_polarity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trigger_polarity</span></code></a></p></td>
+<td><p>When the <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> is set to HARDWARE_TRIGGERED or BULB and then <code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code> is called, the camera will respond to a trigger input as a signal to begin exposure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.usb_port_type" title="ThorlabsGaussianTools.utils.tl_camera.TLCamera.usb_port_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usb_port_type</span></code></a></p></td>
+<td><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">USB_PORT_TYPE</span></code> enumeration defines the values the SDK uses for specifying the USB port type.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.arm">
+<span class="sig-name descname"><span class="pre">arm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frames_to_buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.arm" title="Link to this definition">#</a></dt>
+<dd><p>Before issuing software or hardware triggers to get images from a camera, prepare it for imaging by calling
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code>.
+Depending on the <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code>, either call
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">issue_software_trigger()</span></code> or issue a hardware trigger.
+To start a camera in continuous mode, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> to
+SOFTWARE_TRIGGERED, <code class="xref py py-attr docutils literal notranslate"><span class="pre">frames</span> <span class="pre">per</span> <span class="pre">trigger</span></code> to zero, Arm
+the camera, and then call <code class="xref py py-meth docutils literal notranslate"><span class="pre">issue_software_trigger()</span></code> one time. The
+camera will then self-trigger frames until <code class="xref py py-meth docutils literal notranslate"><span class="pre">disarm()</span></code> or
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">dispose()</span></code> is called.
+To start a camera for hardware triggering, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> to either
+HARDWARE_TRIGGERED or BULB, <code class="xref py py-attr docutils literal notranslate"><span class="pre">frames</span> <span class="pre">per</span> <span class="pre">trigger</span></code> to
+one, <code class="xref py py-attr docutils literal notranslate"><span class="pre">trigger_polarity`</span></code> to rising-edge or falling-edge triggered, arm the
+camera, and then issue a triggering signal on the trigger input.
+If any images are still in the queue when calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code>, they will be considered stale
+and cleared from the queue.
+For more information on the proper procedure for triggering frames and receiving them from the camera, please
+see the Getting Started section.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">binx</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx" title="Link to this definition">#</a></dt>
+<dd><p>The current horizontal binning value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">binx_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx_range" title="Link to this definition">#</a></dt>
+<dd><p>The binning ratio in the X direction can be determined with this property. By default, binning is set to one in
+both X and Y directions.
+This property is Read-Only. To set binx, see <code class="xref py py-attr docutils literal notranslate"><span class="pre">binx</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">biny</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny" title="Link to this definition">#</a></dt>
+<dd><p>The current vertical binning value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">biny_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny_range" title="Link to this definition">#</a></dt>
+<dd><p>The binning ratio in the Y direction can be determined with this property. By default, binning is set to one in
+both X and Y directions.
+This property is Read-Only. To set biny, see <code class="xref py py-attr docutils literal notranslate"><span class="pre">biny</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.bit_depth">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">bit_depth</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.bit_depth" title="Link to this definition">#</a></dt>
+<dd><p>The number of bits to which a pixel value is digitized on a camera.
+In the image data that is delivered to the host application, the bit depth indicates how many of the lower bits
+of each 16-bit ushort value are relevant.
+While most cameras operate at a fixed bit depth, some are reduced when data bandwidth limitations would
+otherwise restrict the frame rate. Please consult the camera manual and specification for details about a
+specific model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">black_level</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level" title="Link to this definition">#</a></dt>
+<dd><p>Black level adds an offset to pixel values. If the connected camera supports black level, the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">black_level_range</span></code> will have a maximum greater than zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">black_level_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level_range" title="Link to this definition">#</a></dt>
+<dd><p>Black level adds an offset to pixel values. If black level is supported by a camera model, then this property
+will have an upper range higher than zero.</p>
+<p>black_level_range indicates the available values that can be used for the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">black_level</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_color_correction_matrix_output_color_space">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">camera_color_correction_matrix_output_color_space</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_color_correction_matrix_output_color_space" title="Link to this definition">#</a></dt>
+<dd><p>This describes the camera color correction matrix output color space. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_sensor_type">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">camera_sensor_type</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_sensor_type" title="Link to this definition">#</a></dt>
+<dd><p>The camera sensor type. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SENSOR_TYPE</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.color_filter_array_phase">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">color_filter_array_phase</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.color_filter_array_phase" title="Link to this definition">#</a></dt>
+<dd><p>This describes the <code class="xref py py-class docutils literal notranslate"><span class="pre">color</span> <span class="pre">filter</span> <span class="pre">array</span> <span class="pre">phase</span></code> for the camera.
+This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FILTER_ARRAY_PHASE</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.communication_interface">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">communication_interface</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.communication_interface" title="Link to this definition">#</a></dt>
+<dd><p>This property describes the computer interface type, such as USB, GigE, or CameraLink. This property is
+Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">COMMUNICATION_INTERFACE</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_decibels_to_gain">
+<span class="sig-name descname"><span class="pre">convert_decibels_to_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gain_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_decibels_to_gain" title="Link to this definition">#</a></dt>
+<dd><p>Use this method to convert the gain (in decibels) from the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">convert_gain_to_decibels</span></code> method back into a gain index.
+(dB).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_gain_to_decibels">
+<span class="sig-name descname"><span class="pre">convert_gain_to_decibels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_gain_to_decibels" title="Link to this definition">#</a></dt>
+<dd><p>Use this method to convert the gain from the <code class="xref py py-attr docutils literal notranslate"><span class="pre">gain</span></code> property into units of Decibels
+(dB).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.data_rate">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">data_rate</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.data_rate" title="Link to this definition">#</a></dt>
+<dd><p>This property sets or gets the sensor-level data rate. Scientific-CCD cameras offer data rates of 20MHz or
+40MHz. Compact-scientific cameras offer FPS30 or FPS50, which are frame rates supported by the camera when
+doing full-frame readout. The actual rate can vary if a region of interest (ROI) or binning is set or if the
+host computer cannot keep up with the camera.
+To test whether the connected camera supports a particular data rate, use
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_is_data_rate_supported</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DATA_RATE</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.disarm">
+<span class="sig-name descname"><span class="pre">disarm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.disarm" title="Link to this definition">#</a></dt>
+<dd><p>When finished issuing software or hardware triggers, call <code class="xref py py-meth docutils literal notranslate"><span class="pre">disarm()</span></code>. This allows
+setting parameters that are not available in armed mode such as <code class="xref py py-attr docutils literal notranslate"><span class="pre">roi</span></code> or
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code>.
+The camera will automatically disarm when <code class="xref py py-meth docutils literal notranslate"><span class="pre">disarm()</span></code> is called.
+Disarming the camera does not clear the image queue – polling can continue until the queue is empty. When
+calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">disarm()</span></code> again, the queue will be automatically cleared.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.dispose" title="Link to this definition">#</a></dt>
+<dd><p>Cleans up the TLCamera instance - make sure to call this when you are done with the camera.
+If using the <em>with</em> statement, dispose is called automatically upon exit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.eep_status">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">eep_status</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.eep_status" title="Link to this definition">#</a></dt>
+<dd><p>Equal Exposure Pulse (EEP) mode is an LVTTL-level signal that is active during the time when all rows have been
+reset during rolling reset, and the end of the exposure time (and the beginning of rolling readout). The signal
+can be used to control an external light source that will be on only during the equal exposure period,
+providing the same amount of exposure for all pixels in the ROI.</p>
+<p>When EEP mode is disabled, the status will always be EEP_STATUS.OFF.
+EEP mode can be enabled, but, depending on the exposure value, active or inactive.
+If EEP is enabled in bulb mode, it will always give a status of BULB.</p>
+<p>This property is Read-Only. To activate EEP mode, see <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_eep_enabled</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EEP_STATUS</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_range_us">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">exposure_time_range_us</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_range_us" title="Link to this definition">#</a></dt>
+<dd><p>Range of possible exposure values in microseconds. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_us">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">exposure_time_us</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_us" title="Link to this definition">#</a></dt>
+<dd><p>The time, in microseconds (us), that charge is integrated on the image sensor.</p>
+<p>To convert milliseconds to microseconds, multiply the milliseconds by 1,000.
+To convert microseconds to milliseconds, divide the microseconds by 1,000.</p>
+<p>IMPORTANT: After issuing a software trigger, it is recommended to wait at least 300ms before setting exposure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.firmware_version">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">firmware_version</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.firmware_version" title="Link to this definition">#</a></dt>
+<dd><p>String containing the version information for all firmware components. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_rate_control_value</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value" title="Link to this definition">#</a></dt>
+<dd><p>The frame rate control adjusts the frame rate of the camera independent of exposure time, within certain
+constraints. For short exposure times, the maximum frame rate is limited by the readout time of the sensor.
+For long exposure times, the frame rate is limited by the exposure time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_rate_control_value_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value_range" title="Link to this definition">#</a></dt>
+<dd><p>Frame rate control will set the frames per second of the camera. If frame rate is supported by a camera model,
+then this property will have an upper range higher than zero.</p>
+<p>frame_rate_control_value_range indicates the available values that can be used for the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">frame_rate_control_value</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_time_us">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_time_us</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_time_us" title="Link to this definition">#</a></dt>
+<dd><p>The time, in microseconds (us), required for a frame to be exposed and read out from the sensor. When
+triggering frames, this property may be used to determine when the camera is ready to accept another trigger.
+Other factors such as the communication speed between the camera and the host computer can affect the maximum
+trigger rate.</p>
+<p>IMPORTANT: Currently, only scientific CCD cameras support this parameter.
+This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frames_per_trigger_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_range" title="Link to this definition">#</a></dt>
+<dd><p>The number of frames generated per software or hardware trigger can be unlimited or finite.
+If set to zero, the camera will self-trigger indefinitely, allowing a continuous video feed.
+If set to one or higher, a single software or hardware trigger will generate only the prescribed number of
+frames and then stop.
+This property returns the valid range for
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">frames_per_trigger_zero_for_unlimited</span></code>.
+This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_zero_for_unlimited">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frames_per_trigger_zero_for_unlimited</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_zero_for_unlimited" title="Link to this definition">#</a></dt>
+<dd><p>The number of frames generated per software or hardware trigger can be unlimited or finite.
+If set to zero, the camera will self-trigger indefinitely, allowing a continuous video feed.
+If set to one or higher, a single software or hardware trigger will generate only the prescribed number of
+frames and then stop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">gain</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain" title="Link to this definition">#</a></dt>
+<dd><p>Gain refers to the scaling of pixel values up or down for a given amount of light. This scaling is applied
+prior to digitization.
+To determine the valid range of values, use the <code class="xref py py-attr docutils literal notranslate"><span class="pre">gain_range</span></code> property.
+If the <code class="xref py py-attr docutils literal notranslate"><span class="pre">gain_range</span></code> maximum is zero, then Gain is not supported for the connected
+camera.
+The units of measure for Gain can vary by camera. Please consult the data sheet for the specific camera model.
+Query the <code class="xref py py-attr docutils literal notranslate"><span class="pre">gain_range</span></code> property to determine the possible values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">gain_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain_range" title="Link to this definition">#</a></dt>
+<dd><p>The range of possible gain values. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_color_correction_matrix">
+<span class="sig-name descname"><span class="pre">get_color_correction_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_color_correction_matrix" title="Link to this definition">#</a></dt>
+<dd><p>Each scientific color camera includes a three-by-three matrix that can be used to achieve consistent color for
+different camera modelsGet the default color correction matrix for this camera. This can be used with the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MonoToColorProcessor</span></code> when color processing an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_default_white_balance_matrix">
+<span class="sig-name descname"><span class="pre">get_default_white_balance_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_default_white_balance_matrix" title="Link to this definition">#</a></dt>
+<dd><p>Get the default white balance matrix for this camera. Each scientific color camera includes a three-by-three
+matrix that corrects white balance for the default color temperature. This can be used with the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MonoToColorProcessor</span></code> to provide a default white balance to an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_data_rate_supported">
+<span class="sig-name descname"><span class="pre">get_is_data_rate_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DATA_RATE</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_data_rate_supported" title="Link to this definition">#</a></dt>
+<dd><p>Scientific-CCD cameras and compact-scientific cameras handle sensor- level data-readout speed differently.
+Use this method to test whether the connected camera supports a particular data rate.
+For more details about the data rate options, see the <code class="xref py py-attr docutils literal notranslate"><span class="pre">data_rate</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>data_rate (<code class="xref py py-class docutils literal notranslate"><span class="pre">DATA_RATE</span></code>) - The data rate value to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool - True if the given data rate is supported by the connected camera, false if it is not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_operation_mode_supported">
+<span class="sig-name descname"><span class="pre">get_is_operation_mode_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OPERATION_MODE</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_operation_mode_supported" title="Link to this definition">#</a></dt>
+<dd><p>This method can be used to determine if a camera has the ability to perform hardware triggering. Some cameras,
+such as the zelux, have both triggered and non-triggered models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>operation_mode (<code class="xref py py-class docutils literal notranslate"><span class="pre">OPERATION_MODE</span></code>) - The operation mode to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool - True if the connected camera supports the given operation mode, false if not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_taps_supported">
+<span class="sig-name descname"><span class="pre">get_is_taps_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TAPS</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_taps_supported" title="Link to this definition">#</a></dt>
+<dd><p>All CCD cameras support a single tap. Some also support dual tap or quad tap. Use this method to test whether a
+connected camera supports a particular Taps value. For more information on taps and tap balancing, see
+is_tap_balance_enabled - <em>Taps not yet supported by Python SDK</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tap (<code class="xref py py-class docutils literal notranslate"><span class="pre">TAPS</span></code>) - The tap value to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool - True if the connected camera supports the given taps mode, false if not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_measured_frame_rate_fps">
+<span class="sig-name descname"><span class="pre">get_measured_frame_rate_fps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_measured_frame_rate_fps" title="Link to this definition">#</a></dt>
+<dd><p>Gets the current rate of frames that are delivered to the host computer. The frame rate can be affected by the
+performance capabilities of the host computer and the communication interface.
+This method can be polled for updated values as needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float - The current frame rate as measured by the camera SDK.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_pending_frame_or_null">
+<span class="sig-name descname"><span class="pre">get_pending_frame_or_null</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Frame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_pending_frame_or_null" title="Link to this definition">#</a></dt>
+<dd><p>Polls the camera for an image.
+This method will block for at most <code class="xref py py-attr docutils literal notranslate"><span class="pre">image_poll_timeout</span></code>
+milliseconds. The Frame that is retrieved will have an image_buffer field to access the pixel data.
+This image_buffer is only valid until the next call to <em>get_pending_frame_or_null()</em> or until disarmed.
+If image data is needed for a longer period of time, use <em>np.copy(image_buffer)</em> to create a deep copy of the
+data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Frame</span></code> or None if there is no pending frame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">hot_pixel_correction_threshold</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold" title="Link to this definition">#</a></dt>
+<dd><p>Due to variability in manufacturing, some pixels have inherently higher dark current which manifests as
+abnormally bright pixels in images, typically visible with longer exposures. Hot-pixel correction identifies
+hot pixels and then substitutes a calculated value based on the values of neighboring pixels in place of hot
+pixels.
+This property may be used to get or set the hot-pixel correction threshold within the available range.
+To determine the available range, query the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">hot_pixel_correction_threshold_range</span></code> property.
+If the threshold range maximum is zero, the connected camera does not support hot-pixel correction.
+To enable hot-pixel correction, use
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">is_hot_pixel_correction_enabled</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">hot_pixel_correction_threshold_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold_range" title="Link to this definition">#</a></dt>
+<dd><p>The range of acceptable hot pixel correction threshold values. If the maximum value is zero, that is an
+indication that hot pixel correction is not supported by the camera. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_pixels">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">image_height_pixels</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_pixels" title="Link to this definition">#</a></dt>
+<dd><p>This property provides the image height in pixels. It is related to ROI height. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_range_pixels">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">image_height_range_pixels</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_range_pixels" title="Link to this definition">#</a></dt>
+<dd><p>The range of possible image height values. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_poll_timeout_ms">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">image_poll_timeout_ms</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_poll_timeout_ms" title="Link to this definition">#</a></dt>
+<dd><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_pending_frame_or_null()</span></code> will block up to this many
+milliseconds to get an image. If the SDK could not get an image within the timeout, None will be returned
+instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_pixels">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">image_width_pixels</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_pixels" title="Link to this definition">#</a></dt>
+<dd><p>This property provides the image width in pixels. It is related to ROI width. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_range_pixels">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">image_width_range_pixels</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_range_pixels" title="Link to this definition">#</a></dt>
+<dd><p>The range of possible image width values. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_armed">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_armed</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_armed" title="Link to this definition">#</a></dt>
+<dd><p>Prior to issuing software or hardware triggers to get images from a camera, call <code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code>
+to prepare it for imaging. This property indicates whether <code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code> has been called.
+This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_enabled">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_cooling_enabled</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_enabled" title="Link to this definition">#</a></dt>
+<dd><p>All Thorlabs scientific cameras are designed to efficiently dissipate heat. Some models additionally provide
+active cooling via a Thermoelectric Cooler (TEC). Cameras with TECs have an additional power cable to power the
+cooler. When the cable is plugged in, the TEC will start cooling. When the cable is unplugged, the TEC will stop
+and the camera will not have active cooling. Use this property to determine via software whether the TEC cable
+is plugged in or not.</p>
+<p>This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_supported">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_cooling_supported</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_supported" title="Link to this definition">#</a></dt>
+<dd><p>All Thorlabs scientific cameras are designed to efficiently dissipate heat. Some models additionally provide
+active cooling. Use this property to determine whether the connected camera supports active cooling.</p>
+<p>This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_enabled">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_eep_enabled</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_enabled" title="Link to this definition">#</a></dt>
+<dd><p>Equal Exposure Pulse (EEP) mode is an LVTTL-level signal that is active between the time when all rows have
+been reset during rolling reset, and the end of the exposure time (and the beginning of rolling readout). The
+signal can be used to control an external light source that will be triggered on only during the equal exposure
+period, providing the same amount of exposure for all pixels in the ROI.</p>
+<p>Please see the camera specification for details on EEP mode.</p>
+<p>When enabled, EEP mode will be active or inactive depending on the exposure duration.
+Use <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_eep_supported</span></code> to test whether the connected camera supports this
+mode.
+Use <code class="xref py py-attr docutils literal notranslate"><span class="pre">eep_status</span></code> to see whether the mode is active, inactive, in bulb mode, or
+disabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_supported">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_eep_supported</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_supported" title="Link to this definition">#</a></dt>
+<dd><p>Equal Exposure Pulse (EEP) mode is an LVTTL-level signal that is active between the time when all rows have
+been reset during rolling reset, and the end of the exposure time (and the beginning of rolling readout). The
+signal can be used to control an external light source that will be triggered on only during the equal exposure
+period, providing the same amount of exposure for all pixels in the ROI.</p>
+<p>This property determines whether the connected camera supports EEP mode. This property is Read-Only. To
+activate EEP mode, see <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_eep_enabled</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_frame_rate_control_enabled">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_frame_rate_control_enabled</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_frame_rate_control_enabled" title="Link to this definition">#</a></dt>
+<dd><p>While frame rate control is enabled, the frames per second will be controlled by
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">frame_rate_control_value</span></code>.</p>
+<p>The frame rate control adjusts the frame rate of the camera independent of exposure time, within certain
+constraints. For short exposure times, the maximum frame rate is limited by the readout time of the sensor.
+For long exposure times, the frame rate is limited by the exposure time.</p>
+<p>This property enables or disables the frame rate control feature.
+If the connected camera supports frame rate control, the threshold-range maximum will be greater than zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_hot_pixel_correction_enabled">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_hot_pixel_correction_enabled</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_hot_pixel_correction_enabled" title="Link to this definition">#</a></dt>
+<dd><p>Due to variability in manufacturing, some pixels have inherently higher dark current which manifests as
+abnormally bright pixels in images, typically visible with longer exposures. Hot-pixel correction identifies
+hot pixels and then substitutes a calculated value based on the values of neighboring pixels in place of hot
+pixels.
+This property enables or disables hot-pixel correction.
+If the connected camera supports hot-pixel correction, the threshold-range maximum will be greater than zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_on">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_led_on</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_on" title="Link to this definition">#</a></dt>
+<dd><p>Some scientific cameras include an LED indicator light on the back panel. This property can be used to turn it
+on or off.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_supported">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_led_supported</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_supported" title="Link to this definition">#</a></dt>
+<dd><p>Some scientific cameras include an LED indicator light on the back panel.
+This property is Read-Only. Use <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_led_supported</span></code> to determine whether the
+connected camera has an LED indicator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_nir_boost_supported">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_nir_boost_supported</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_nir_boost_supported" title="Link to this definition">#</a></dt>
+<dd><p>Some scientific-CCD camera models offer an enhanced near-infrared imaging mode for wavelengths in the 500 to
+1000nm range. The Thorlabs website includes a helpful overview of this camera function on the Camera Basics
+page: <a class="reference external" href="https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=8962">https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=8962</a></p>
+<p>This property enables or disables NIR-boost mode. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.issue_software_trigger">
+<span class="sig-name descname"><span class="pre">issue_software_trigger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.issue_software_trigger" title="Link to this definition">#</a></dt>
+<dd><p>If the <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> is set to SOFTWARE_TRIGGERED
+and <code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code> is called, then calling this method will generate a
+trigger through the camera SDK rather than through the hardware trigger input.</p>
+<p>The behavior of a software trigger depends on the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">frames_per-trigger_zero_for_unlimited</span></code> property:</p>
+<ul class="simple">
+<li><p>If <code class="xref py py-attr docutils literal notranslate"><span class="pre">frames_per-trigger_zero_for_unlimited</span></code> is set to zero, then a single software trigger will start continuous-video mode.</p></li>
+<li><p>If <code class="xref py py-attr docutils literal notranslate"><span class="pre">frames_per-trigger_zero_for_unlimited</span></code> is set to one or higher, then one software trigger will generate a corresponding number of frames.</p></li>
+</ul>
+<p>Multiple software triggers can be issued before calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">disarm()</span></code>.</p>
+<p>IMPORTANT: For scientific-CCD cameras, after issuing a software trigger, it is necessary to wait at least 300ms
+before adjusting the <code class="xref py py-attr docutils literal notranslate"><span class="pre">exposure_time_us</span></code> property.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.model">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.model" title="Link to this definition">#</a></dt>
+<dd><p>Gets the camera model number such as 1501M or 8051C. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.name" title="Link to this definition">#</a></dt>
+<dd><p>Cameras can always be distinguished from each other by their serial numbers and/or model. A camera can also be
+named to distinguish between them. For example, if using a two-camera system, cameras may be named “Left” and
+“Right.”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.name_string_length_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name_string_length_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.name_string_length_range" title="Link to this definition">#</a></dt>
+<dd><p>The minimum and maximum string lengths allowed for setting the camera’s name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.operation_mode">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">operation_mode</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.operation_mode" title="Link to this definition">#</a></dt>
+<dd><p>Thorlabs scientific cameras can be software- or hardware-triggered.
+To run continuous-video mode, set
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">frames_per_trigger_zero_for_unlimited</span></code> to zero and
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> to SOFTWARE_TRIGGERED.
+To issue individual software triggers, set
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">frames_per_trigger_zero_for_unlimited</span></code> to a number
+greater than zero and <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> to SOFTWARE_TRIGGERED.
+To trigger frames using the hardware trigger input, set <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> mode
+to HARDWARE_TRIGGERED. In this mode, the <code class="xref py py-attr docutils literal notranslate"><span class="pre">exposure_time_us</span></code> property is
+used to determine the length of the exposure.
+To trigger frames using the hardware trigger input and to determine the exposure length with that signal, set
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> to BULB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">OPERATION_MODE</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.polar_phase">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">polar_phase</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.polar_phase" title="Link to this definition">#</a></dt>
+<dd><p>This describes how the polarization filter is aligned over the camera sensor. This property is only supported
+in polarized cameras. In a polarized camera, each pixel is covered with one of four linear polarizers with
+orientations of -45°, 0°, 45°, or 90°. The polar phase represents the origin pixel on the sensor. To determine
+if a camera supports polarization, check the <code class="xref py py-attr docutils literal notranslate"><span class="pre">camera_sensor_type</span></code>
+property. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">POLAR_PHASE</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi" title="Link to this definition">#</a></dt>
+<dd><p>By default, the region of interest (ROI) is the same as the sensor resolution. The region of interest can be
+reduced to a smaller rectangle in order to focus on an area smaller than a full- frame image. In some cases,
+reducing the ROI can increase the frame rate since less data needs to be transmitted to the host computer.
+Binning sums adjacent sensor pixels into “super pixels”. It trades off spatial resolution for sensitivity and
+speed. For example, if a sensor is 1920 by 1080 pixels and binning is set to two in the X direction and two in
+the Y direction, the resulting image will be 960 by 540 pixels. Since smaller images require less data to be
+transmitted to the host computer, binning may increase the frame rate. By default, binning is set to one in
+both horizontal and vertical directions. binning can be changed by setting <code class="xref py py-attr docutils literal notranslate"><span class="pre">binx</span></code> or
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">biny</span></code>. It can be different in the X direction than the Y direction, and the available
+ranges vary by camera model.</p>
+<p>To determine the available ROI ranges, use the <code class="xref py py-attr docutils literal notranslate"><span class="pre">roi_range</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ROI</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">roi_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi_range" title="Link to this definition">#</a></dt>
+<dd><p>The rules for rectangular regions of interest (ROIs) vary by camera model. Please consult the camera
+documentation for more details. The ROI height range indicates the smallest height to which an ROI can be set
+up to a maximum of the sensor’s vertical resolution. The ROI width range indicates the smallest width to which
+an ROI can be set up to a maximum of the sensor’s horizontal resolution.</p>
+<p>This property is Read-Only. For setting the ROI, see <code class="xref py py-attr docutils literal notranslate"><span class="pre">roi</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ROIRange</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_height_pixels">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_height_pixels</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_height_pixels" title="Link to this definition">#</a></dt>
+<dd><p>This property provides the physical height of the camera sensor in pixels. It is equivalent to the
+ROI-width-range-maximum value. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_height_um">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_pixel_height_um</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_height_um" title="Link to this definition">#</a></dt>
+<dd><p>This property provides the physical height of a single light-sensitive photo site on the sensor. This property
+is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_size_bytes">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_pixel_size_bytes</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_size_bytes" title="Link to this definition">#</a></dt>
+<dd><p>The pixel size of the camera’s sensor in bytes. This represents the amount of space 1 pixel will occupy in the
+frame buffer. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_width_um">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_pixel_width_um</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_width_um" title="Link to this definition">#</a></dt>
+<dd><p>This property provides the physical width of a single light-sensitive photo site on the sensor. This property is
+Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_readout_time_ns">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_readout_time_ns</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_readout_time_ns" title="Link to this definition">#</a></dt>
+<dd><p>The time, in nanoseconds (ns), that readout data from image sensor. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_width_pixels">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sensor_width_pixels</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_width_pixels" title="Link to this definition">#</a></dt>
+<dd><p>This property provides the physical width of the camera sensor in pixels. This is equivalent to the
+ROI-height-range maximum value. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">serial_number</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number" title="Link to this definition">#</a></dt>
+<dd><p>This property gets the unique identifier for a camera. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number_string_length_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">serial_number_string_length_range</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number_string_length_range" title="Link to this definition">#</a></dt>
+<dd><p>The minimum and maximum number of characters allowed in the serial number string. This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.trigger_polarity">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">trigger_polarity</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.trigger_polarity" title="Link to this definition">#</a></dt>
+<dd><p>When the <code class="xref py py-attr docutils literal notranslate"><span class="pre">operation_mode</span></code> is set to HARDWARE_TRIGGERED or BULB and then
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">arm()</span></code> is called, the camera will respond to a trigger input as a signal to begin
+exposure. Setting trigger polarity tells the camera to begin exposure on either the rising edge or falling
+edge of the trigger signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TRIGGER_POLARITY</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ThorlabsGaussianTools.utils.tl_camera.TLCamera.usb_port_type">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">usb_port_type</span></span><a class="headerlink" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.usb_port_type" title="Link to this definition">#</a></dt>
+<dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">USB_PORT_TYPE</span></code> enumeration defines the values the SDK uses for specifying the USB
+port type.
+These values are returned by SDK API functions and callbacks based on the type of physical USB port that the
+device is connected to.
+This property is Read-Only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">USB_PORT_TYPE</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ThorlabsGaussianTools.utils.tl_camera.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ThorlabsGaussianTools.utils.tl_camera</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ThorlabsGaussianTools.utils.tl_camera.TLCameraSDK.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ThorlabsGaussianTools.utils.tl_camera.TLCameraSDK</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera"><code class="docutils literal notranslate"><span class="pre">TLCamera</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.__init__"><code class="docutils literal notranslate"><span class="pre">TLCamera.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.arm"><code class="docutils literal notranslate"><span class="pre">TLCamera.arm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx"><code class="docutils literal notranslate"><span class="pre">TLCamera.binx</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.binx_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.binx_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny"><code class="docutils literal notranslate"><span class="pre">TLCamera.biny</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.biny_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.biny_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.bit_depth"><code class="docutils literal notranslate"><span class="pre">TLCamera.bit_depth</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level"><code class="docutils literal notranslate"><span class="pre">TLCamera.black_level</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.black_level_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.black_level_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_color_correction_matrix_output_color_space"><code class="docutils literal notranslate"><span class="pre">TLCamera.camera_color_correction_matrix_output_color_space</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.camera_sensor_type"><code class="docutils literal notranslate"><span class="pre">TLCamera.camera_sensor_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.color_filter_array_phase"><code class="docutils literal notranslate"><span class="pre">TLCamera.color_filter_array_phase</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.communication_interface"><code class="docutils literal notranslate"><span class="pre">TLCamera.communication_interface</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_decibels_to_gain"><code class="docutils literal notranslate"><span class="pre">TLCamera.convert_decibels_to_gain()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.convert_gain_to_decibels"><code class="docutils literal notranslate"><span class="pre">TLCamera.convert_gain_to_decibels()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.data_rate"><code class="docutils literal notranslate"><span class="pre">TLCamera.data_rate</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.disarm"><code class="docutils literal notranslate"><span class="pre">TLCamera.disarm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.dispose"><code class="docutils literal notranslate"><span class="pre">TLCamera.dispose()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.eep_status"><code class="docutils literal notranslate"><span class="pre">TLCamera.eep_status</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_range_us"><code class="docutils literal notranslate"><span class="pre">TLCamera.exposure_time_range_us</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.exposure_time_us"><code class="docutils literal notranslate"><span class="pre">TLCamera.exposure_time_us</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.firmware_version"><code class="docutils literal notranslate"><span class="pre">TLCamera.firmware_version</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value"><code class="docutils literal notranslate"><span class="pre">TLCamera.frame_rate_control_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_rate_control_value_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.frame_rate_control_value_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frame_time_us"><code class="docutils literal notranslate"><span class="pre">TLCamera.frame_time_us</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.frames_per_trigger_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.frames_per_trigger_zero_for_unlimited"><code class="docutils literal notranslate"><span class="pre">TLCamera.frames_per_trigger_zero_for_unlimited</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain"><code class="docutils literal notranslate"><span class="pre">TLCamera.gain</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.gain_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.gain_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_color_correction_matrix"><code class="docutils literal notranslate"><span class="pre">TLCamera.get_color_correction_matrix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_default_white_balance_matrix"><code class="docutils literal notranslate"><span class="pre">TLCamera.get_default_white_balance_matrix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_data_rate_supported"><code class="docutils literal notranslate"><span class="pre">TLCamera.get_is_data_rate_supported()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_operation_mode_supported"><code class="docutils literal notranslate"><span class="pre">TLCamera.get_is_operation_mode_supported()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_is_taps_supported"><code class="docutils literal notranslate"><span class="pre">TLCamera.get_is_taps_supported()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_measured_frame_rate_fps"><code class="docutils literal notranslate"><span class="pre">TLCamera.get_measured_frame_rate_fps()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.get_pending_frame_or_null"><code class="docutils literal notranslate"><span class="pre">TLCamera.get_pending_frame_or_null()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold"><code class="docutils literal notranslate"><span class="pre">TLCamera.hot_pixel_correction_threshold</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.hot_pixel_correction_threshold_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.hot_pixel_correction_threshold_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_pixels"><code class="docutils literal notranslate"><span class="pre">TLCamera.image_height_pixels</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_height_range_pixels"><code class="docutils literal notranslate"><span class="pre">TLCamera.image_height_range_pixels</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_poll_timeout_ms"><code class="docutils literal notranslate"><span class="pre">TLCamera.image_poll_timeout_ms</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_pixels"><code class="docutils literal notranslate"><span class="pre">TLCamera.image_width_pixels</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.image_width_range_pixels"><code class="docutils literal notranslate"><span class="pre">TLCamera.image_width_range_pixels</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_armed"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_armed</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_enabled"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_cooling_enabled</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_cooling_supported"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_cooling_supported</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_enabled"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_eep_enabled</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_eep_supported"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_eep_supported</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_frame_rate_control_enabled"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_frame_rate_control_enabled</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_hot_pixel_correction_enabled"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_hot_pixel_correction_enabled</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_on"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_led_on</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_led_supported"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_led_supported</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.is_nir_boost_supported"><code class="docutils literal notranslate"><span class="pre">TLCamera.is_nir_boost_supported</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.issue_software_trigger"><code class="docutils literal notranslate"><span class="pre">TLCamera.issue_software_trigger()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.model"><code class="docutils literal notranslate"><span class="pre">TLCamera.model</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.name"><code class="docutils literal notranslate"><span class="pre">TLCamera.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.name_string_length_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.name_string_length_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.operation_mode"><code class="docutils literal notranslate"><span class="pre">TLCamera.operation_mode</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.polar_phase"><code class="docutils literal notranslate"><span class="pre">TLCamera.polar_phase</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi"><code class="docutils literal notranslate"><span class="pre">TLCamera.roi</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.roi_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.roi_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_height_pixels"><code class="docutils literal notranslate"><span class="pre">TLCamera.sensor_height_pixels</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_height_um"><code class="docutils literal notranslate"><span class="pre">TLCamera.sensor_pixel_height_um</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_size_bytes"><code class="docutils literal notranslate"><span class="pre">TLCamera.sensor_pixel_size_bytes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_pixel_width_um"><code class="docutils literal notranslate"><span class="pre">TLCamera.sensor_pixel_width_um</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_readout_time_ns"><code class="docutils literal notranslate"><span class="pre">TLCamera.sensor_readout_time_ns</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.sensor_width_pixels"><code class="docutils literal notranslate"><span class="pre">TLCamera.sensor_width_pixels</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number"><code class="docutils literal notranslate"><span class="pre">TLCamera.serial_number</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.serial_number_string_length_range"><code class="docutils literal notranslate"><span class="pre">TLCamera.serial_number_string_length_range</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.trigger_polarity"><code class="docutils literal notranslate"><span class="pre">TLCamera.trigger_polarity</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ThorlabsGaussianTools.utils.tl_camera.TLCamera.usb_port_type"><code class="docutils literal notranslate"><span class="pre">TLCamera.usb_port_type</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/generated/generated/generated/ThorlabsGaussianTools.utils.tl_camera.TLCamera.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Francois Haye.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

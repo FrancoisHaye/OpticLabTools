@@ -1,4 +1,7 @@
 """
+
+.. currentmodule:: MogrfTools
+
 ---------------
 mogrf_utilities
 ---------------
@@ -60,8 +63,8 @@ class Path:
     @classmethod
     def from_calibration(
         cls,
-        amp_corr_x: function,
-        amp_corr_y: function,
+        amp_corr_x,
+        amp_corr_y,
         x_pol: np.polynomial.Polynomial,
         y_pol: np.polynomial.Polynomial,
         alpha: float,
@@ -75,7 +78,7 @@ class Path:
 
         Parameters
         ----------
-        amp_corr_x, amp_corr_y: ``function``
+        amp_corr_x, amp_corr_y
             Vectorized function ``f`` giving ``A = f(freq)``, the amplitude corresponding to the frequency freq in order for the intensity to remain constant during the movement of the point.
 
         x_pol, y_pol : ``np.polynomial.Polynomial``
@@ -229,13 +232,13 @@ class Line(Path):
         super().__init__(time_ms=time_ms, x_frequencies=freqx, y_frequencies=freqy, x_amplitudes=x_amplitudes, y_amplitudes=y_amplitudes)
 
     @classmethod
-    def from_calibration(cls, amp_corr_x: function, amp_corr_y: function, x_pol: np.polynomial.Polynomial, y_pol: np.polynomial.Polynomial, alpha: float, beta: float, theta_deg: float = 45, length_um: float = 10., speed_um_ms: float = 0.01, n: int = N//2, backwards: bool = False):
+    def from_calibration(cls, amp_corr_x, amp_corr_y, x_pol: np.polynomial.Polynomial, y_pol: np.polynomial.Polynomial, alpha: float, beta: float, theta_deg: float = 45, length_um: float = 10., speed_um_ms: float = 0.01, n: int = N//2, backwards: bool = False):
         """
         Make a Line Path from AOM calibration results.
 
         Parameters
         ----------
-        amp_corr_x, amp_corr_y : ``function``
+        amp_corr_x, amp_corr_y :
             The function giving the amplitude correction to intensity variation with frequency. Call signature: amplitudes_i = amp_corr_i(frequencies_i).
 
         x_pol, y_pol : ``np.polynomial.Polynomial``
@@ -334,13 +337,13 @@ class Circle(Path):
         return super().__init__(time_ms, freqx, freqy, x_amplitudes, y_amplitudes)
 
     @classmethod
-    def from_calibration(cls, amp_corr_x: function, amp_corr_y: function, x_pol: np.polynomial.Polynomial, y_pol: np.polynomial.Polynomial, alpha: float, beta: float, R_um: float = 10., x0_um: float = 0, y0_um: float = 0, speed_um_ms: float = 0.01, n: int = N//2):
+    def from_calibration(cls, amp_corr_x, amp_corr_y, x_pol: np.polynomial.Polynomial, y_pol: np.polynomial.Polynomial, alpha: float, beta: float, R_um: float = 10., x0_um: float = 0, y0_um: float = 0, speed_um_ms: float = 0.01, n: int = N//2):
         """
         Make a Circle Path from AOM calibration results.
 
         Parameters
         ----------
-        amp_corr_x, amp_corr_y : ``function``
+        amp_corr_x, amp_corr_y
             The function giving the amplitude correction to intensity variation with frequency. Call signature: amplitudes_i = amp_corr_i(frequencies_i).
 
         x_pol, y_pol : ``np.polynomial.Polynomial``
@@ -432,13 +435,13 @@ class Lissajous(Path):
         return super().__init__(time_ms, freqx, freqy, x_amplitudes, y_amplitudes)
 
     @classmethod
-    def from_calibration(cls, amp_corr_x: function, amp_corr_y: function, x_pol: np.polynomial.Polynomial, y_pol: np.polynomial.Polynomial, alpha: float, beta: float, Lx_um: float = 10., Ly_um: float = 10, delta_rad: float = 0, speed_ratio: float = 1, x0_um: float = 0, y0_um: float = 0, duration_ms: int = 1000, n: int = N//2):
+    def from_calibration(cls, amp_corr_x, amp_corr_y, x_pol: np.polynomial.Polynomial, y_pol: np.polynomial.Polynomial, alpha: float, beta: float, Lx_um: float = 10., Ly_um: float = 10, delta_rad: float = 0, speed_ratio: float = 1, x0_um: float = 0, y0_um: float = 0, duration_ms: int = 1000, n: int = N//2):
         """
         Make a ``Lissajous`` path from calibration results.
         
         Parameters
         ----------
-        amp_corr_x, amp_corr_y : ``function``
+        amp_corr_x, amp_corr_y :
             The function giving the amplitude correction to intensity variation with frequency. Call signature: amplitudes_i = amp_corr_i(frequencies_i).
 
         x_pol, y_pol : ``np.polynomial.Polynomial``

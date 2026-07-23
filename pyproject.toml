@@ -8,6 +8,12 @@ include-package-data = true
 [tools.setuptools.packages.find]
 where = ["src"]
 
+[dependency-groups]
+docs = [
+	"sphinx>=8",
+	"pydata-sphinx-theme>=0.20.0"
+]
+
 [project]
 name = "OpticLabTools"
 version = "0.0.1"
@@ -36,7 +42,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 
 [project.scripts]
-imaging = "ThorlabsGaussianTools.directImage:main"
-gaussian = "ThorlabsGaussianTools.gaussianFit:main"
-AOMcal = "ThorlabsGaussianTools.aomCalibration:main"
-calibrate = "MogrfTools.launch_calibration:main"
+imaging-simple = "ThorlabsGaussianTools.directImage:main"
+imaging-gaussian = "ThorlabsGaussianTools.gaussianFit:main"
+#imaging-AOMcal = "ThorlabsGaussianTools.aomCalibration:main"
+imaging-calibrate = "MogrfTools.launch_calibration:main"

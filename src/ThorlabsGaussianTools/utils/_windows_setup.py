@@ -19,6 +19,15 @@ import sys
 
 
 def configure_path(relativepath: str):
+    """
+    Add the Thorlabs dlls to the PATH environment variable for this python session.
+
+    Parameters
+    ----------
+    relativepath : ``str``
+        The relative path of the dlls directory from the path of the ThorlabsGaussianTools package.
+    
+    """
     is_64bits = sys.maxsize > 2**32
 
     if is_64bits:

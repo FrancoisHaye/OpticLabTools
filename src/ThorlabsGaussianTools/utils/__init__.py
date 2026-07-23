@@ -2,21 +2,29 @@
 ``utils``
 =========
 
+.. currentmodule:: ThorlabsGaussianTools.utils
+
 Utility library containing all necessary tools for connection to devices and fitting.
 
 Available functions
 -------------------
-configure_path
-    add the thorlabs dlls directories to the PATH for this python session.
+
+.. autosummary::
+    :toctree: generated
+    :recursive:
+
+    configure_path - add the thorlabs dlls directories to the PATH for this python session.
 
 Usefull subpackages
 -------------------
-tl_camera
-    Dialogue API with ThorLabs camera, from ThorLabs Inc.
-pygauss
-    Gaussian fitting routines
-mogdevice
-    RF synthetizer API, from MogLabs Inc.
+
+.. autosummary::
+    :toctree: generated
+    :recursive:
+
+    tl_camera - Dialogue API with ThorLabs camera, from ThorLabs Inc.
+    pygauss - Gaussian fitting routines
+    mogdevice - RF synthetizer API, from MogLabs Inc.
 
 """
 
