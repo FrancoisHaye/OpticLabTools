@@ -22,6 +22,7 @@ python:
    - method: uv
      command: sync
      groups:
-       - default
        - docs
+   - method: pip
+     path: .
         
