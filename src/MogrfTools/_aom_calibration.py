@@ -264,7 +264,7 @@ def quick_frequency_calibration(n, freq, g=23.):
 
     try:
         aomDevice = MOGDevice("COM", port=7)
-    except serial.SerialException, RuntimeError:
+    except (serial.SerialException, RuntimeError):
         print("AOM device already connected.")
         
     
