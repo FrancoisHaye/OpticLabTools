@@ -445,7 +445,7 @@ def noise_calibration(duration_s: float = 30, step: float = 0.5):
                 np.savez_compressed("./noise.npz", intensity = i, time = t)
                 cam.disarm()
 
-def test_calibration(freq, compensate_x: function, compensate_y: function):
+def test_calibration(freq, compensate_x, compensate_y):
     
     intensities_x = np.zeros_like(freq)
     intensities_y = np.zeros_like(freq)
