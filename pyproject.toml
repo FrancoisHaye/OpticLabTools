@@ -11,7 +11,8 @@ where = ["src"]
 [dependency-groups]
 docs = [
 	"sphinx>=8",
-	"pydata-sphinx-theme>=0.20.0"
+	"pydata-sphinx-theme>=0.20.0",
+	"sphinx-copybutton"
 ]
 
 [project]

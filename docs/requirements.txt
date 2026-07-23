@@ -1,5 +1,6 @@
 sphinx>=8
 pydata-sphinx-theme>=0.20.0
+sphinx-copybutton
 click>=8.4.1
 rich>=15.0.0
 numpy>=2.4.6
