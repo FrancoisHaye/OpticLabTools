@@ -1,3 +1,4 @@
 tests/*/
 .vscode/*
 .venv/*
+docs/build/
