@@ -1,2 +1,3 @@
-# Thorlabs Gaussian Tools
+# OpticLabTools
 
+This python package provides various utilities to use in an optics laboratory, such as gaussian beam fitting and Acousto-optic Modulators (AOMs) interface. It was designed in the course of an internship at the University of Florence and is not very general. However some parts of the codes and CLI tools could be usefull for many researchers, for instance the in real time fitting of gaussian beams, that allow quick and easy collimation or optimization of beam sizes.
