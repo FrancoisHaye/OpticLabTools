@@ -1,3 +1,5 @@
+ThorlabsGaussianTools
+=====================
 
 .. automodule:: ThorlabsGaussianTools
     :members:

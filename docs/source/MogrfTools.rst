@@ -1,3 +1,5 @@
+MogrfTools
+==========
 
 .. automodule:: MogrfTools
     :members:
